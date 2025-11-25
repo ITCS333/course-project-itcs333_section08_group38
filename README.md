@@ -3,11 +3,11 @@
 # ITCS333 Course Page
 
 ## The names and student IDs of all team members.
-Lulwa Abdullateef Fares - 202203695 \\
-Zainab Abbas - \\
-Rehan Saleh - \\
-Sara - \\
-Lulwa Alsubaue -\\
+Lulwa Abdullateef Fares - 202203695 <br>
+Zainab Abbas - <br>
+Rehan Saleh - <br>
+Sara - <br>
+Lulwa Alsubaue -<br>
 ## A table indicating which student was responsible for which task.
 | Student Name | University ID | Tasks Completed |
 |--------------|---------------|------------------|
