@@ -18,8 +18,10 @@ let assignments = [];
 
 // --- Element Selections ---
 // TODO: Select the assignment form ('#assignment-form').
+const assignmentForm = document.getElementById("assignment-form");
 
 // TODO: Select the assignments table body ('#assignments-tbody').
+const assignmentsTbody = document.getElementById("assignments-tbody");
 
 // --- Functions ---
 
@@ -34,7 +36,18 @@ let assignments = [];
  * - A "Delete" button with class "delete-btn" and `data-id="${id}"`.
  */
 function createAssignmentRow(assignment) {
-  // ... your implementation here ...
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+        <td>${assignment.title}</td>
+        <td>${assignment.dueDate}</td>
+        <td>
+            <button class="edit-btn" data-id="${assignment.id}" type="button">Edit</button>
+            <button class="delete-btn" data-id="${assignment.id}" type="button">Delete</button>
+        </td>
+    `;
+
+    return tr;
 }
 
 /**
@@ -46,7 +59,12 @@ function createAssignmentRow(assignment) {
  * append the resulting <tr> to `assignmentsTableBody`.
  */
 function renderTable() {
-  // ... your implementation here ...
+  assignmentsTbody.innerHTML = "";
+
+  for (let i = 0; i < assignments.length; i++) {
+    const row = createAssignmentRow(assignments[i]);
+    assignmentsTbody.appendChild(row);
+  }
 }
 
 /**
@@ -61,7 +79,24 @@ function renderTable() {
  * 6. Reset the form.
  */
 function handleAddAssignment(event) {
-  // ... your implementation here ...
+    event.preventDefault();
+
+    const title = document.getElementById("assignment-title").value.trim();
+    const description = document.getElementById("assignment-description").value.trim();
+    const dueDate = document.getElementById("assignment-due-date").value;
+    const files = document.getElementById("assignment-files").value.trim();
+
+    const newAssignment = {
+        id: `asg_${Date.now()}`,
+        title,
+        description,
+        dueDate,
+        files
+    };
+
+    assignments.push(newAssignment);
+    renderTable();
+    assignmentForm.reset();
 }
 
 /**
