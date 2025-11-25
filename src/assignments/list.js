@@ -30,19 +30,19 @@ function createAssignmentArticle(assignment) {
     const h2 = document.createElement("h2");
     h2.textContent = assignment.title;
 
-    const dueP = document.createElement("p");
-    dueP.textContent = "Due: " + assignment.dueDate;
+    const due = document.createElement("p");
+    due.textContent = `Due: ${assignment.dueDate}`;
 
-    const descP = document.createElement("p");
-    descP.textContent = assignment.description;
+    const desc = document.createElement("p");
+    desc.textContent = assignment.description;
 
     const a = document.createElement("a");
     a.href = `details.html?id=${assignment.id}`;
     a.textContent = "View Details & Discussion";
 
     article.appendChild(h2);
-    article.appendChild(dueP);
-    article.appendChild(descP);
+    article.appendChild(due);
+    article.appendChild(desc);
     article.appendChild(a);
 
     return article;
