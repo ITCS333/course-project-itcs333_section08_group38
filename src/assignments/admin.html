@@ -25,7 +25,7 @@
 
     <!-- TODO: Create a 'header' with a main heading ('h1') "Manage Assignments". -->
      <header>
-        <h1>Manage Assignment</h1>
+        <h1>Manage Assignments</h1>
      </header>
 
     <!-- TODO: Create the 'main' content area. -->
@@ -33,12 +33,12 @@
      
         <!-- Section 1: Add/Edit Assignment Form -->
         <!-- TODO: Create a 'section' for the form. -->
-        <section id="add-assignment">
+        <section id="add-assignment-form">
             <!-- TODO: Add a sub-heading ('h2') "Add a New Assignment". -->
              <h2>Add a New Assignment</h2>
 
             <!-- TODO: Create a 'form' with an id "assignment-form". Action can be '#'. -->
-             <form id="assignment-form">
+             <form id="assignment-form" action="#">
                 <!-- TODO: Use a 'fieldset' to group the form controls. -->
                  <fieldset>
                     <!-- TODO: Add a 'legend', e.g., "Assignment Details". -->
@@ -60,7 +60,7 @@
                          - label 'for': "assignment-due-date"
                          - input 'id': "assignment-due-date", type="date", required -->
                          <label for="assignment-due-date">Assignment Due Date</label>
-                         <input name="assignment-due-date" id="assignment-due-date" type="date", required>
+                         <input name="assignment-due-date" id="assignment-due-date" type="date" required>
                     
                     <!-- TODO: Add a 'label' and 'textarea' for attached files or links (one per line).
                          - label 'for': "assignment-files"
@@ -72,7 +72,7 @@
                     <!-- TODO: Add a 'button' to submit the form.
                          - id="add-assignment", type="submit", Text: "Add Assignment" -->
                          <button name="add-assignment" id="add-assignment" type="submit">Add Assignment</button>
-                         
+
                 <!-- End of fieldset. -->
                 </fieldset>
             <!-- End of form. -->
