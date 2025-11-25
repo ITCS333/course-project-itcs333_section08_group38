@@ -24,7 +24,7 @@
 <body>
     <!-- TODO: Create a 'header' with a main heading ('h1'). Use a dummy title like "Assignment 1: HTML Basics". -->
      <header>
-        <h1>Assignment 1: HTML Basics</h1>
+        <h1 id="assignment-title">Assignment 1: HTML Basics</h1>
      </header>
 
     <!-- TODO: Create the 'main' content area. -->
@@ -34,13 +34,13 @@
         <!-- TODO: Use an 'article' to display the main assignment information. -->
          <article>
             <!-- TODO: Add a paragraph ('p') to display the due date, e.g., "Due: YYYY-MM-DD". -->
-             <p>Due: YYYY-MM-DD</p>
+             <p id="assignment-due-date">Due: YYYY-MM-DD</p>
 
             <!-- TODO: Add a sub-heading ('h2') "Description". -->
              <h2>Description</h2>
 
             <!-- TODO: Add a paragraph ('p') with dummy text for the assignment's detailed description. -->
-             <p>dummy text for the assignment's detailed description.</p>
+             <p id="assignment-description">dummy text for the assignment's detailed description.</p>
 
             <!-- TODO: Add another sub-heading ('h2') "Attached Files & Links". -->
              <h2>Attached Files & Links</h2>
@@ -49,7 +49,7 @@
                 <!-- TODO: Add list items ('li') with anchor tags ('a') for each resource. Use dummy links for now. -->
                 <!-- Example: <li><a href="#">assignment-brief.pdf</a></li> -->
             <!-- End of the list. -->
-             <ul>
+             <ul id="assignment-files-list">
                 <li> <a href="http://www.google.com/">assignment1.pdf</a> </li>
                 <li> <a href="http://www.google.com/">assignment2-brief.pdf</a> </li>
                 <li> <a href="http://www.google.com/">assignment3-brief.pdf</a> </li>
@@ -73,7 +73,7 @@
                     <!-- TODO: Use a 'p' for the comment text (e.g., "Is it okay to use a 'section' inside an 'article'?"). -->
                     <!-- TODO: Use a 'footer' to show the author (e.g., "Posted by: Jane Smith"). -->
                 <!-- End of comment article. -->
-            <div>
+            <div id="comment-list">
                 <article>
                     <p>Is it okay to use a 'section' inside an 'article'?</p>
                     <footer>Posted by: Jane Smith</footer>
@@ -86,7 +86,7 @@
 
             <!-- Subsection 2.2: Add a Comment Form -->
             <!-- TODO: Create a 'form' for users to post new comments. Action can be '#'. -->
-             <form action="#">
+             <form id="comment-form" action="#">
 
                 <!-- TODO: Use a 'fieldset' to group the controls. -->
                  <fieldset>
@@ -97,7 +97,7 @@
                          - label 'for': "new-comment"
                          - textarea 'id': "new-comment", required -->
                      <label for="new-comment">New Comment</label>
-                     <textarea id="new-comment" name="new-comment" required></textarea>
+                     <textarea id="new-comment-text" name="new-comment" required></textarea>
 
                     <!-- TODO: Add a 'button' to submit the comment.
                          - type="submit", Text: "Post Comment" -->
