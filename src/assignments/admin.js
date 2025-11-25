@@ -10,7 +10,6 @@
   
   3. Implement the TODOs below.
 */
-<script src="admin.js" defer></script>
 
 // --- Global Data Store ---
 // This will hold the assignments loaded from the JSON file.
@@ -110,7 +109,11 @@ function handleAddAssignment(event) {
  * 4. Call `renderTable()` to refresh the list.
  */
 function handleTableClick(event) {
-  // ... your implementation here ...
+    if (event.target.classList.contains("delete-btn")) {
+        const id = event.target.dataset.id;
+        assignments = assignments.filter(a => a.id !== id);
+        renderTable();
+    }
 }
 
 /**
@@ -124,7 +127,12 @@ function handleTableClick(event) {
  * 5. Add the 'click' event listener to `assignmentsTableBody` (calls `handleTableClick`).
  */
 async function loadAndInitialize() {
-  // ... your implementation here ...
+  const response = await fetch('../api/assignments.json');
+  assignments = await response.json();
+  renderTable();
+
+  assignmentForm.addEventListener("submit", handleAddAssignment);
+  assignmentsTbody.addEventListener("click", handleTableClick);
 }
 
 // --- Initial Page Load ---
