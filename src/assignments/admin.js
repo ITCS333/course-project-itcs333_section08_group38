@@ -10,6 +10,7 @@
   
   3. Implement the TODOs below.
 */
+<script src="admin.js" defer></script>
 
 // --- Global Data Store ---
 // This will hold the assignments loaded from the JSON file.
