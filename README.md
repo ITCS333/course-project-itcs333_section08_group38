@@ -6,5 +6,11 @@
 Lulwa Abdullateef Fares - 202203695
 
 ## A table indicating which student was responsible for which task.
-
+| Student Name | University ID | Tasks Completed |
+|--------------|---------------|------------------|
+| Sara | xxxxxxxxx | Task 1: Homepage, Admin Portal & User Management |
+| Lulwa Abdullateef | 202203695 | Task 2: Course Resources |
+| Zainab Abbas | xxxxxxxxx | Task 3: Weekly Breakdown |
+| Rehan Saleh| xxxxxxxxx | Task 4: Assignments |
+| Lulwa Alsubaue | xxxxxxxxx | Task 5: General Discussion Boards |
 ## A link to your live, hosted application on Replit.
