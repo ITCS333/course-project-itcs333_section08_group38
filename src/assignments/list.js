@@ -13,6 +13,7 @@
 
 // --- Element Selections ---
 // TODO: Select the section for the assignment list ('#assignment-list-section').
+const assignmentListSection = document.getElementById("assignment-list-section");
 
 // --- Functions ---
 
