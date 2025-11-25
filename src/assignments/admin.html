@@ -24,42 +24,66 @@
 <body>
 
     <!-- TODO: Create a 'header' with a main heading ('h1') "Manage Assignments". -->
+     <header>
+        <h1>Manage Assignment</h1>
+     </header>
 
     <!-- TODO: Create the 'main' content area. -->
-
+    <main>
+     
         <!-- Section 1: Add/Edit Assignment Form -->
         <!-- TODO: Create a 'section' for the form. -->
+        <section id="add-assignment">
             <!-- TODO: Add a sub-heading ('h2') "Add a New Assignment". -->
+             <h2>Add a New Assignment</h2>
 
             <!-- TODO: Create a 'form' with an id "assignment-form". Action can be '#'. -->
+             <form id="assignment-form">
                 <!-- TODO: Use a 'fieldset' to group the form controls. -->
+                 <fieldset>
                     <!-- TODO: Add a 'legend', e.g., "Assignment Details". -->
+                     <legend>Assignment Details</legend>
 
                     <!-- TODO: Add a 'label' and 'input' for the assignment title.
                          - label 'for': "assignment-title"
                          - input 'id': "assignment-title", type="text", required -->
+                         <label for="assignment-title">Assignment Title</label>
+                         <input name="assignment-title"  id="assignment-title" type="text" required>
 
                     <!-- TODO: Add a 'label' and 'textarea' for the description.
                          - label 'for': "assignment-description"
                          - textarea 'id': "assignment-description", rows="5", required -->
+                         <label for="assignment-description">Assignment Description</label>
+                         <textarea name="assignment-description" id="assignment-description" rows="5" required></textarea>
 
                     <!-- TODO: Add a 'label' and 'input' for the due date.
                          - label 'for': "assignment-due-date"
                          - input 'id': "assignment-due-date", type="date", required -->
+                         <label for="assignment-due-date">Assignment Due Date</label>
+                         <input name="assignment-due-date" id="assignment-due-date" type="date", required>
                     
                     <!-- TODO: Add a 'label' and 'textarea' for attached files or links (one per line).
                          - label 'for': "assignment-files"
                          - textarea 'id': "assignment-files", rows="3" -->
+                         <label for="assignment-files">Assignment Files</label>
+                         <textarea name="assignment-files" id="assignment-files" rows="3" ></textarea>
+
 
                     <!-- TODO: Add a 'button' to submit the form.
                          - id="add-assignment", type="submit", Text: "Add Assignment" -->
+                         <button name="add-assignment" id="add-assignment" type="submit">Add Assignment</button>
+                         
                 <!-- End of fieldset. -->
+                </fieldset>
             <!-- End of form. -->
+            </form>
         <!-- End of form section. -->
+        </section>
 
 
         <!-- Section 2: Existing Assignments List -->
         <!-- TODO: Create a 'section' to display the list of current assignments. -->
+        <section id="existing-assignment-list">
             <!-- TODO: Add a sub-heading ('h2') "Current Assignments". -->
 
             <!-- TODO: Create a 'table' with id "assignments-table". -->
@@ -81,7 +105,9 @@
                 <!-- End of tbody. -->
             <!-- End of table. -->
         <!-- End of list section. -->
+        </section>
 
     <!-- End of main. -->
+    </main>
 </body>
 </html>
