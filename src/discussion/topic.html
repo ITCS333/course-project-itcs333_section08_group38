@@ -15,24 +15,80 @@
   <title>Topic Details</title>
 
     <!-- TODO: Link to your CSS framework or stylesheet. -->
+
+     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        header {
+            margin-bottom: 20px;
+        }
+        article, section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        footer {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+        }
+        .actions button {
+            margin-right: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+        }
+        fieldset {
+            border: 1px solid #aaa;
+            padding: 15px;
+        }
+        legend {
+            font-weight: bold;
+        }
+        button {
+            padding: 6px 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <!-- TODO: Create a 'header' with a main heading ('h1'). Use a dummy title like "Question about CSS Flexbox". -->
 <h1>Question about CSS Flexbox</h1>
     <!-- TODO: Create the 'main' content area. -->
-
+ <main>
         <!-- Section 1: Original Post -->
         <!-- TODO: Use an 'article' to display the main topic post. Give it an 'id' like "original-post". -->
+         <article id="original-post">
+
             <!-- TODO: Add a paragraph ('p') with the dummy text of the original message. -->
+             <p>
+                hi hello hi hi hi hi 
+            </p>
             <!-- TODO: Use a 'footer' for the metadata: "Posted by: Student Name on YYYY-MM-DD". -->
+              <footer>
+                Posted by: Student Lulwa on 2025-11-26
+            </footer>
+
             <!-- TODO: Add a container for "Edit" and "Delete" buttons, just like on the main page.
                  Remember, these actions are restricted to the owner or admin. -->
+                 <div class="actions">
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
         <!-- End of article. -->
-
+</article>
         <!-- Section 2: Replies -->
         <!-- TODO: Create a 'section' for the replies, with an 'id' of "replies-section". -->
+         <section id="replies-section">
             <!-- TODO: Add a sub-heading ('h2') "Replies". -->
-
+ 
+            <h2>Replies</h2>
             <!-- TODO: Add a container (like a 'div') for the list of replies. -->
                 <!-- TODO: Add 1-2 dummy replies to show the structure. -->
 
@@ -60,7 +116,9 @@
                 <!-- End of fieldset. -->
             <!-- End of form. -->
         <!-- End of replies section. -->
+         </section>
 
     <!-- End of main. -->
+     </main>
 </body>
 </html>
