@@ -114,7 +114,30 @@ function renderTable(studentArray) {
  */
 function handleChangePassword(event) {
   // ... your implementation here ...
-  
+  event.preventDefault();
+
+  const currPassInput=document.getElementById("current-password");
+  const newPassInput=document.getElementById("new-password");
+  const confirmPassInput=document.getElementById("confirm-password");
+
+  const currPassvalue =currPassInput.value;
+  const newPassValue =newPassInput.value;
+  const confirmPassValue =confirmPassInput.value;
+
+  if(newPassValue !== confirmPassValue)
+  {
+    alert("Passwords do not match.");
+    return;
+  }
+  if(newPassValue.length<8)
+  {
+    alert("Password must be at least 8 characters.");
+    return;
+  }
+  alert("Password updated successfully!");
+  currPassInput.value="";
+  newPassInput.value="";
+  confirmPassInput.value="";
 }
 
 /**
@@ -134,6 +157,42 @@ function handleChangePassword(event) {
  */
 function handleAddStudent(event) {
   // ... your implementation here ...
+  event.preventDefault();
+  
+  const studentNameInput=document.getElementById("student-name");
+  const studentIdInput=document.getElementById("student-id");
+  const studentEmailInput=document.getElementById("student-email");
+
+  const studentNamevalue =studentNameInput.value;
+  const studentIdValue =studentIdInput.value;
+  const studentEmailValue =studentEmailInput.value;
+
+  if(!studentNamevalue || !studentIdValue || !studentEmailValue)
+  {
+    alert("Please fill out all required fields.");
+    return;
+  }
+
+  for( const student in students){
+    if(student.id==studentIdValue){
+      alert("There is student with the same ID already exists");
+      return;
+    }
+  }
+
+  const newStudent={
+    name:studentNamevalue,
+    id:studentIdInput,
+    email:studentEmailValue
+  };
+
+  students.push(newStudent);
+
+  renderTable(students);
+
+  studentNameInput.value="";
+  studentIdInput.value="";
+  studentEmailInput.value="";
 }
 
 /**
@@ -149,6 +208,12 @@ function handleAddStudent(event) {
  */
 function handleTableClick(event) {
   // ... your implementation here ...
+  const clickedEle=event.target;
+
+  if(clickedEle.classList.contains("delete-btn")){
+   students=students.filter(student => student.id!==clickedEle.dataset.id)
+   renderTable(students);
+  }
 }
 
 /**
