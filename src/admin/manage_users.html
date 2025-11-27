@@ -20,6 +20,8 @@
     <!-- TODO: Link to a CSS file or a CSS framework. -->
     <link rel="stylesheet" href="/src/common/styles.css">
 
+    <script src="manage_users.js" defer></script>
+
 </head>
 <body>
 
@@ -39,7 +41,7 @@
             <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Change Your Password". -->
             <h2>Change Your Password</h2>
             <!-- TODO: Create a 'form' for changing the password. The 'action' can be '#'. -->
-            <form action="#">
+            <form action="#" id="password-form">
                 <!-- TODO: Use a 'fieldset' to group the password-related fields. -->
                 <fieldset>
                     <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
@@ -93,6 +95,7 @@
         <section>
             <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Manage Students". -->
             <h2>Manage Students</h2>
+            <input id="search-input" type="text" placeholder="search for a student">
             <!-- Subsection 2.1: Add New Student Form -->
             <!-- TODO: Create a 'details' element so the "Add Student" form can be collapsed. -->
             <details>
@@ -100,7 +103,7 @@
                 <summary>Add new Student</summary>
 
                 <!-- TODO: Create a 'form' for adding a new student. 'action' can be '#'. -->
-                <form action="#">
+                <form action="#" id="add-student-form">
                     <!-- TODO: Use a 'fieldset' to group the new student fields. -->
                     <fieldset>
                         <!-- TODO: Add a 'legend' for the fieldset, e.g., "New Student Information". -->

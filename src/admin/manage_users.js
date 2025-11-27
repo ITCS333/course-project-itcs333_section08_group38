@@ -18,17 +18,25 @@ let students = [];
 // the HTML document is parsed before this script runs.
 
 // TODO: Select the student table body (tbody).
+const studentTableBody=document.getElementsByTagName('tbody');
 
 // TODO: Select the "Add Student" form.
 // (You'll need to add id="add-student-form" to this form in your HTML).
+const addStudentform =document.getElementById('add-student-form');
+
 
 // TODO: Select the "Change Password" form.
 // (You'll need to add id="password-form" to this form in your HTML).
+const changePasswordForm=document.getElementById(id="password-form");
+
 
 // TODO: Select the search input field.
 // (You'll need to add id="search-input" to this input in your HTML).
+const searchInput=document.getElementById('search-input');
+
 
 // TODO: Select all table header (th) elements in thead.
+const tableHeaders=document.querySelectorAll('th');
 
 // --- Functions ---
 
@@ -45,6 +53,34 @@ let students = [];
  */
 function createStudentRow(student) {
   // ... your implementation here ...
+
+  const tr=document.createElement("tr");
+  const tdName=document.createElement("td");
+  const tdId=document.createElement("td");
+  const tdEmail=document.createElement("td");
+  const tdAction=document.createElement("td");
+  const editBtn=document.createElement("button");
+  const deleteBtn=document.createElement("button");
+    
+  tdName.textContent= student.name;
+  tdId.textContent= student.id;
+  tdEmail.textContent= student.email;
+  editBtn.textContent="Edit";
+  deleteBtn.textContent="Delete";
+
+  editBtn.classList.add("edit-btn");
+  deleteBtn.classList.add("delete-btn");
+  editBtn.dataset.id=student.id;
+  deleteBtn.dataset.id=student.id;
+
+  tr.appendChild(tdName);
+  tr.appendChild(tdId);
+  tr.appendChild(tdEmail);
+  tdAction.appendChild(editBtn);
+  tdAction.appendChild(deleteBtn);
+  tr.appendChild(tdAction);
+
+  return tr;
 }
 
 /**
@@ -57,6 +93,11 @@ function createStudentRow(student) {
  */
 function renderTable(studentArray) {
   // ... your implementation here ...
+  studentTableBody.innerHTML="";
+  for( const student in studentArray){
+    const tr =createStudentRow(student);
+    studentTableBody.appendChild(tr);
+  }
 }
 
 /**
@@ -73,6 +114,7 @@ function renderTable(studentArray) {
  */
 function handleChangePassword(event) {
   // ... your implementation here ...
+  
 }
 
 /**
