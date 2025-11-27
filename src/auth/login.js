@@ -46,7 +46,7 @@ const messageContainer=document.getElementById("message-container");
 function displayMessage(message, type) {
   // ... your implementation here ...
   messageContainer.textContent=message;
-  messageContainer.classList.add("type");
+  messageContainer.classList=type;
 }
 
 /**
@@ -64,7 +64,7 @@ function displayMessage(message, type) {
 function isValidEmail(email) {
   // ... your implementation here ...
 
-  regex= /^[a-z]+@[a-z]+\.[a-z]+$/i
+  regex=/\S+@\S+\.\S+/;
   return regex.test(email);
 }
 
@@ -106,16 +106,19 @@ function handleLogin(event) {
 
   if(!isValidEmail(email)){
     displayMessage("Invalid email format.", "error")
+    return
   }
   else if (!isValidPassword(pass)){
     displayMessage("Password must be at least 8 characters.", "error");
+    return;
   }
   else{
     displayMessage("Login successful!", "success")
+    emailInput.value="";
+    passInput.value="";
   }
 
-  emailInput="";
-  passInput="";
+  
 }
 
 /**
