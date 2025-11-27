@@ -59,7 +59,9 @@
 </head>
 <body>
     <!-- TODO: Create a 'header' with a main heading ('h1'). Use a dummy title like "Question about CSS Flexbox". -->
-<h1>Question about CSS Flexbox</h1>
+         <header>
+         <h1>Question about CSS Flexbox</h1>
+         </header>
     <!-- TODO: Create the 'main' content area. -->
  <main>
         <!-- Section 1: Original Post -->
@@ -82,7 +84,7 @@
                 <button>Delete</button>
             </div>
         <!-- End of article. -->
-</article>
+         </article>
         <!-- Section 2: Replies -->
         <!-- TODO: Create a 'section' for the replies, with an 'id' of "replies-section". -->
          <section id="replies-section">
@@ -90,6 +92,7 @@
  
             <h2>Replies</h2>
             <!-- TODO: Add a container (like a 'div') for the list of replies. -->
+              <div id="replies-list">
                 <!-- TODO: Add 1-2 dummy replies to show the structure. -->
 
                 <!-- Example Reply 1: -->
@@ -98,23 +101,57 @@
                     <!-- TODO: Use a 'footer' to show the author and date. -->
                     <!-- TODO: Add a container for "Edit" and "Delete" buttons for this specific reply.
                          These actions are restricted to the reply's author or the admin. -->
+                         <article class="reply">
+                    <p>Have you tried using justify-content: space-between? </p>
+                    <footer>Posted by:  Lulwa on 2025-11-26</footer>
+                    <div class="actions">
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </div>
+                </article>
+                 <article class="reply">
+                    <p>dummay text doesnt  matter .</p>
+                    <footer>Posted by: lulwa on 2025-11-27</footer>
+                    <div class="actions">
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </div>
+                
                 <!-- End of reply article. -->
-
+                  </article>
+                  </div>
+                  </section>
         <!-- Section 3: Add a Reply Form -->
         <!-- TODO: Create a 'section' for the reply form. -->
+         <section id="reply-form-section">
             <!-- TODO: Add a sub-heading ('h2') "Post a Reply". -->
+              
+            <h2>Post a Reply</h2>
             <!-- TODO: Create a 'form' for users to post new replies. Action can be '#'. -->
+                  <form action="#" id="reply-form">
                 <!-- TODO: Use a 'fieldset' to group the controls. -->
+                 
+                <fieldset>
                     <!-- TODO: Add a 'legend', e.g., "Your Reply". -->
+           
+                    <legend>Your Reply</legend>
 
                     <!-- TODO: Add a 'label' and 'textarea' for the reply message.
                          - label 'for': "new-reply"
                          - textarea 'id': "new-reply", required -->
+                         label for="new-reply">Reply Message:</label>
+                    <textarea id="new-reply" required></textarea>
+
+                    
                     
                     <!-- TODO: Add a 'button' to submit the reply.
                          - type="submit", Text: "Post Reply" -->
+                         <button type="submit">Post Reply</button>
+               
                 <!-- End of fieldset. -->
+                  </fieldset>
             <!-- End of form. -->
+                </form>
         <!-- End of replies section. -->
          </section>
 
