@@ -45,6 +45,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 
 // TODO: Set CORS headers to allow cross-origin requests
+header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
@@ -77,6 +78,8 @@ $password = "";
 // Create PDO connection
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
 
     // Throw exceptions on error
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -279,7 +282,8 @@ function createAssignment($db, $data) {
     }
     
     // TODO: Generate a unique assignment ID
-    
+    // MySQL auto_increment will generate ID automatically — nothing to do here
+
     
     // TODO: Handle the 'files' field
        if (!is_array($files)) {
@@ -788,7 +792,52 @@ exit;
         
     } elseif ($method === 'DELETE') {
         // TODO: Handle DELETE requests
-        
+        // Determine resource type (assignments or comments)
+if ($type === 'assignments') {
+
+    // assignment delete requires id
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "message" => "assignment id is required"
+        ]);
+        exit;
+    }
+
+    // Call delete function
+    $response = deleteAssignment($pdo, $id);
+    echo json_encode($response);
+    exit;
+
+} elseif ($type === 'comments') {
+
+    // comment delete requires id
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode([
+            "success" => false,
+            "message" => "comment id is required"
+        ]);
+        exit;
+    }
+
+    // Call delete function
+    $response = deleteComment($pdo, $id);
+    echo json_encode($response);
+    exit;
+
+} else {
+
+    // Invalid DELETE resource
+    http_response_code(400);
+    echo json_encode([
+        "success" => false,
+        "message" => "Invalid resource for DELETE"
+    ]);
+    exit;
+}
+
         if ($resource === 'assignments') {
             // TODO: Get 'id' from query parameter or request body
              if (!isset($_GET['id'])) {
