@@ -56,11 +56,12 @@
             cursor: pointer;
         }
     </style>
+     <script src="topic.js" defer></script>
 </head>
 <body>
     <!-- TODO: Create a 'header' with a main heading ('h1'). Use a dummy title like "Question about CSS Flexbox". -->
          <header>
-         <h1>Question about CSS Flexbox</h1>
+         <h1 id="topic-subject">Question about CSS Flexbox</h1>
          </header>
     <!-- TODO: Create the 'main' content area. -->
  <main>
@@ -69,11 +70,11 @@
          <article id="original-post">
 
             <!-- TODO: Add a paragraph ('p') with the dummy text of the original message. -->
-             <p>
+             <p id="op-message">
                 hi hello hi hi hi hi 
             </p>
             <!-- TODO: Use a 'footer' for the metadata: "Posted by: Student Name on YYYY-MM-DD". -->
-              <footer>
+              <footer id="op-footer">
                 Posted by: Student Lulwa on 2025-11-26
             </footer>
 
@@ -92,7 +93,7 @@
  
             <h2>Replies</h2>
             <!-- TODO: Add a container (like a 'div') for the list of replies. -->
-              <div id="replies-list">
+              <div  id="reply-list-container">
                 <!-- TODO: Add 1-2 dummy replies to show the structure. -->
 
                 <!-- Example Reply 1: -->
@@ -128,7 +129,7 @@
               
             <h2>Post a Reply</h2>
             <!-- TODO: Create a 'form' for users to post new replies. Action can be '#'. -->
-                  <form action="#" id="reply-form">
+                  <form action="#"  id="reply-form">
                 <!-- TODO: Use a 'fieldset' to group the controls. -->
                  
                 <fieldset>
@@ -140,7 +141,7 @@
                          - label 'for': "new-reply"
                          - textarea 'id': "new-reply", required -->
                          label for="new-reply">Reply Message:</label>
-                    <textarea id="new-reply" required></textarea>
+                    <textarea  id="new-reply-text" required></textarea>
 
                     
                     
