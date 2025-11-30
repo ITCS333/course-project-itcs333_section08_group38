@@ -39,9 +39,6 @@ function createResourceRow(resource) {
   // ... your implementation here ...
     const { id, title, description } = resource;
 
-    // Create a <tr> element
-    const tr = document.createElement("tr");
-
     // Fill the row with required <td>s
       const tr = document.createElement("tr");
   tr.innerHTML = `
