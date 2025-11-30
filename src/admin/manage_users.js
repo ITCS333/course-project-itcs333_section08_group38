@@ -18,16 +18,17 @@ let students = [];
 // the HTML document is parsed before this script runs.
 
 // TODO: Select the student table body (tbody).
-const studentTableBody = document.getElementsByTagName('tbody');
+const studentTableBody = document.querySelector("#student-table tbody");
+
 
 // TODO: Select the "Add Student" form.
 // (You'll need to add id="add-student-form" to this form in your HTML).
-const addStudentform = document.getElementById('add-student-form');
+const addStudentForm = document.getElementById('add-student-form');
 
 
 // TODO: Select the "Change Password" form.
 // (You'll need to add id="password-form" to this form in your HTML).
-const changePasswordForm = document.getElementById(id = "password-form");
+const changePasswordForm = document.getElementById("password-form");
 
 
 // TODO: Select the search input field.
@@ -94,7 +95,7 @@ function createStudentRow(student) {
 function renderTable(studentArray) {
   // ... your implementation here ...
   studentTableBody.innerHTML = "";
-  for (const student in studentArray) {
+  for (const student of studentArray) {
     const tr = createStudentRow(student);
     studentTableBody.appendChild(tr);
   }
@@ -161,16 +162,16 @@ function handleAddStudent(event) {
   const studentIdInput = document.getElementById("student-id");
   const studentEmailInput = document.getElementById("student-email");
 
-  const studentNamevalue = studentNameInput.value;
+  const studentNameValue = studentNameInput.value;
   const studentIdValue = studentIdInput.value;
   const studentEmailValue = studentEmailInput.value;
 
-  if (!studentNamevalue || !studentIdValue || !studentEmailValue) {
+  if (!studentNameValue || !studentIdValue || !studentEmailValue) {
     alert("Please fill out all required fields.");
     return;
   }
 
-  for (const student in students) {
+  for (const student of students) {
     if (student.id == studentIdValue) {
       alert("There is student with the same ID already exists");
       return;
@@ -178,8 +179,8 @@ function handleAddStudent(event) {
   }
 
   const newStudent = {
-    name: studentNamevalue,
-    id: studentIdInput,
+    name: studentNameValue,
+    id: studentIdValue,
     email: studentEmailValue
   };
 
@@ -263,7 +264,7 @@ function handleSort(event) {
   else if (columnIndex === 2) sortProperty = "email";
 
   let Dir=target.dataset.sortDir;
-  if(Dir=="asc") Dir="des";
+  if(Dir=="asc") Dir="desc";
   else Dir="asc";
   target.dataset.sortDir=Dir;
   
@@ -274,10 +275,10 @@ function handleSort(event) {
   if (sortProperty === "id") {
     valA = Number(valA);
     valB = Number(valB);
-    if (sortDir === "asc") return valA - valB;
+    if (Dir === "asc") return valA - valB;
     else return valB - valA;
   } else {
-    if (sortDir === "asc") return valA.localeCompare(valB);
+    if (Dir === "asc") return valA.localeCompare(valB);
     else return valB.localeCompare(valA);
   }
   });
@@ -315,7 +316,7 @@ async function loadStudentsAndInitialize() {
   students = data;
   renderTable(students);
   changePasswordForm.addEventListener("submit",handleChangePassword);
-  addStudentform.addEventListener("submit",handleAddStudent);
+  addStudentForm.addEventListener("submit",handleAddStudent);
   studentTableBody.addEventListener("click",handleTableClick);
   searchInput.addEventListener("input",handleSearch);
   tableHeaders.forEach(header => {

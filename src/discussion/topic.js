@@ -22,6 +22,13 @@ let currentReplies = []; // Will hold replies for *this* topic
 
 // --- Element Selections ---
 // TODO: Select all the elements you added IDs for in step 2.
+const topicSubject = document.querySelector('#topic-subject');
+const opMessage = document.querySelector('#op-message');
+const opFooter = document.querySelector('#op-footer');
+const replyListContainer = document.querySelector('#reply-list-container');
+const replyForm = document.querySelector('#reply-form');
+const newReplyText = document.querySelector('#new-reply-text'); // textarea
+
 
 // --- Functions ---
 
@@ -34,7 +41,10 @@ let currentReplies = []; // Will hold replies for *this* topic
  */
 function getTopicIdFromURL() {
   // ... your implementation here ...
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id'); // returns  a null value if id is not found
 }
+
 
 /**
  * TODO: Implement the renderOriginalPost function.
@@ -47,6 +57,9 @@ function getTopicIdFromURL() {
  */
 function renderOriginalPost(topic) {
   // ... your implementation here ...
+   topicSubject.textContent = topic.subject;
+  opMessage.textContent = topic.message;
+  opFooter.textContent = `Posted by: ${topic.author} on ${topic.date}`;
 }
 
 /**
@@ -59,8 +72,27 @@ function renderOriginalPost(topic) {
  */
 function createReplyArticle(reply) {
   // ... your implementation here ...
+    const article = document.createElement('article');
+
+  const p = document.createElement('p');
+  p.textContent = reply.text;
+
+  const footer = document.createElement('footer');
+  footer.textContent = `Posted by: ${reply.author} on ${reply.date}`;
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.classList.add('delete-reply-btn');
+  deleteBtn.dataset.id = reply.id;
+
+  article.appendChild(p);
+  article.appendChild(footer);
+  article.appendChild(deleteBtn);
+
+  return article;
 }
 
+  
 /**
  * TODO: Implement the renderReplies function.
  * It should:
@@ -71,6 +103,11 @@ function createReplyArticle(reply) {
  */
 function renderReplies() {
   // ... your implementation here ...
+  replyListContainer.innerHTML = '';
+  currentReplies.forEach(reply => {
+    const replyEl = createReplyArticle(reply);
+    replyListContainer.appendChild(replyEl);
+  });
 }
 
 /**
@@ -93,6 +130,21 @@ function renderReplies() {
  */
 function handleAddReply(event) {
   // ... your implementation here ...
+   event.preventDefault();
+
+  const text = newReplyText.value.trim();
+  if (!text) return;
+
+  const newReply = {
+    id: `reply_${Date.now()}`,
+    author: 'Student',
+    date: new Date().toISOString().split('T')[0],
+    text: text
+  };
+
+  currentReplies.push(newReply);
+  renderReplies();
+  newReplyText.value = '';
 }
 
 /**
@@ -107,6 +159,11 @@ function handleAddReply(event) {
  */
 function handleReplyListClick(event) {
   // ... your implementation here ...
+  if (event.target.classList.contains('delete-reply-btn')) {
+    const id = event.target.dataset.id;
+    currentReplies = currentReplies.filter(reply => reply.id !== id);
+    renderReplies();
+  }
 }
 
 /**
@@ -129,6 +186,40 @@ function handleReplyListClick(event) {
  */
 async function initializePage() {
   // ... your implementation here ...
+  currentTopicId = getTopicIdFromURL();
+
+  if (!currentTopicId) {
+    topicSubject.textContent = "Topic not found.";
+    return;
+  }
+
+  try {
+    const [topicsResponse, repliesResponse] = await Promise.all([
+      fetch('topics.json'),
+      fetch('replies.json')
+    ]);
+
+    const topics = await topicsResponse.json();
+    const repliesData = await repliesResponse.json();
+
+    const topic = topics.find(t => t.id === currentTopicId);
+
+    currentReplies = repliesData[currentTopicId] || [];
+
+    if (topic) {
+      renderOriginalPost(topic);
+      renderReplies();
+
+      replyForm.addEventListener('submit', handleAddReply);
+      replyListContainer.addEventListener('click', handleReplyListClick);
+    } else {
+      topicSubject.textContent = "Topic not found.";
+    }
+
+  } catch (err) {
+    console.error(err);
+    topicSubject.textContent = "Error loading topic.";
+  }
 }
 
 // --- Initial Page Load ---
