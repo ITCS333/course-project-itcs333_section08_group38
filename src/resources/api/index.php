@@ -52,37 +52,49 @@
 
 // TODO: Set headers for JSON response and CORS
 // Set Content-Type to application/json
+header("Content-Type: application/json; charset=UTF-8");
 // Allow cross-origin requests (CORS) if needed
+header("Access-Control-Allow-Origin: *");
 // Allow specific HTTP methods (GET, POST, PUT, DELETE, OPTIONS)
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 // Allow specific headers (Content-Type, Authorization)
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 
 // TODO: Handle preflight OPTIONS request
 // If the request method is OPTIONS, return 200 status and exit
-
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 // TODO: Include the database connection class
 // Assume the Database class has a method getConnection() that returns a PDO instance
 // Example: require_once '../config/Database.php';
+require_once '../config/Database.php';
 
 
 // TODO: Get the PDO database connection
 // Example: $database = new Database();
 // Example: $db = $database->getConnection();
-
+$database = new Database();
+$db = $database->getConnection();
 
 // TODO: Get the HTTP request method
 // Use $_SERVER['REQUEST_METHOD']
-
+$method = $_SERVER['REQUEST_METHOD'];
 
 // TODO: Get the request body for POST and PUT requests
 // Use file_get_contents('php://input') to get raw POST data
 // Decode JSON data using json_decode() with associative array parameter
-
+$inputData = json_decode(file_get_contents('php://input'), true);
 
 // TODO: Parse query parameters
 // Get 'action', 'id', 'resource_id', 'comment_id' from $_GET
-
+$action      = $_GET['action']      ?? null;
+$id          = $_GET['id']          ?? null;
+$resource_id = $_GET['resource_id'] ?? null;
+$comment_id  = $_GET['comment_id']  ?? null;
 
 // ============================================================================
 // RESOURCE FUNCTIONS
@@ -496,13 +508,18 @@ try {
  */
 function sendResponse($data, $statusCode = 200) {
     // TODO: Set HTTP response code using http_response_code()
+    http_response_code($statusCode);
     
     // TODO: Ensure data is an array
     // If not, wrap it in an array
-    
+    if (!is_array($data)) {
+        $data = ["response" => $data];
+    }    
+
     // TODO: Echo JSON encoded data
     // Use JSON_PRETTY_PRINT for readability (optional)
-    
+    echo json_encode($data, JSON_PRETTY_PRINT);
+
     // TODO: Exit to prevent further execution
     exit;
 }
@@ -517,6 +534,7 @@ function sendResponse($data, $statusCode = 200) {
 function validateUrl($url) {
     // TODO: Use filter_var with FILTER_VALIDATE_URL
     // Return true if valid, false otherwise
+    return filter_var($url, FILTER_VALIDATE_URL) !== false;
 }
 
 
@@ -528,13 +546,17 @@ function validateUrl($url) {
  */
 function sanitizeInput($data) {
     // TODO: Trim whitespace using trim()
-    
+    $data = trim($data);
+
     // TODO: Strip HTML tags using strip_tags()
-    
+    $data = strip_tags($data);
+
     // TODO: Convert special characters using htmlspecialchars()
     // Use ENT_QUOTES to escape both double and single quotes
-    
+    $data = htmlspecialchars($data, ENT_QUOTES);
+
     // TODO: Return sanitized data
+    return $data;
 }
 
 
@@ -547,13 +569,22 @@ function sanitizeInput($data) {
  */
 function validateRequiredFields($data, $requiredFields) {
     // TODO: Initialize empty array for missing fields
-    
+    $missing = [];
     // TODO: Loop through required fields
     // Check if each field exists in data and is not empty
     // If missing or empty, add to missing fields array
-    
+    foreach ($requiredFields as $field) {
+        if (!isset($data[$field]) || trim($data[$field]) === '') {
+            $missing[] = $field;
+        }
+    }
+
     // TODO: Return result array
     // ['valid' => (count($missing) === 0), 'missing' => $missing]
+    return [
+        'valid' => count($missing) === 0,
+        'missing' => $missing
+    ];
 }
 
 ?>
