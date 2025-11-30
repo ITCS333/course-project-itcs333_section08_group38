@@ -17,8 +17,11 @@ let resources = [];
 
 // --- Element Selections ---
 // TODO: Select the resource form ('#resource-form').
+const resourceForm = document.querySelector("#resource-form");
+
 
 // TODO: Select the resources table body ('#resources-tbody').
+const resourcesTbody = document.querySelector("#resources-tbody");
 
 // --- Functions ---
 
@@ -34,8 +37,25 @@ let resources = [];
  */
 function createResourceRow(resource) {
   // ... your implementation here ...
-}
+  function createResourceRow(resource) {
+    const { id, title, description } = resource;
 
+    // Create a <tr> element
+    const tr = document.createElement("tr");
+
+    // Fill the row with required <td>s
+    tr.innerHTML = `
+        <td>${title}</td>
+        <td>${description}</td>
+        <td>
+            <button class="edit-btn" data-id="${id}">Edit</button>
+            <button class="delete-btn" data-id="${id}">Delete</button>
+        </td>
+    `;
+
+    return tr;
+}
+  
 /**
  * TODO: Implement the renderTable function.
  * It should:
@@ -46,8 +66,18 @@ function createResourceRow(resource) {
  */
 function renderTable() {
   // ... your implementation here ...
-}
+    // 1. Clear the table body
+    resourcesTbody.innerHTML = "";
 
+    // 2. Loop through the resources array
+    resources.forEach(resource => {
+        // 3. Create a <tr> using createResourceRow()
+        const row = createResourceRow(resource);
+
+        // Append the row to the tbody
+        resourcesTbody.appendChild(row);
+    });
+}
 /**
  * TODO: Implement the handleAddResource function.
  * This is the event handler for the form's 'submit' event.
@@ -61,7 +91,32 @@ function renderTable() {
  */
 function handleAddResource(event) {
   // ... your implementation here ...
+    // 1. Prevent form submission
+    event.preventDefault();
+
+    // 2. Get input values
+    const title = document.getElementById("resource-title").value;
+    const description = document.getElementById("resource-description").value;
+    const link = document.getElementById("resource-link").value;
+
+    // 3. Create new resource object with unique ID
+    const newResource = {
+        id: `res_${Date.now()}`,
+        title: title,
+        description: description,
+        link: link
+    };
+
+    // 4. Add to global resources array
+    resources.push(newResource);
+
+    // 5. Refresh the table
+    renderTable();
+
+    // 6. Reset the form
+    resourceForm.reset();
 }
+  resourceForm.addEventListener("submit", handleAddResource);
 
 /**
  * TODO: Implement the handleTableClick function.
@@ -75,7 +130,21 @@ function handleAddResource(event) {
  */
 function handleTableClick(event) {
   // ... your implementation here ...
+    // 1. Check if the clicked element is a delete button
+    if (event.target.classList.contains("delete-btn")) {
+
+        // 2. Get the ID from data-id attribute
+        const id = event.target.getAttribute("data-id");
+
+        // 3. Remove the resource with that ID
+        resources = resources.filter(resource => resource.id !== id);
+
+        // 4. Refresh the table
+        renderTable();
+    }
 }
+
+resourcesTbody.addEventListener("click", handleTableClick);
 
 /**
  * TODO: Implement the loadAndInitialize function.
@@ -89,6 +158,26 @@ function handleTableClick(event) {
  */
 async function loadAndInitialize() {
   // ... your implementation here ...
+    try {
+        // 1. Fetch data from resources.json
+        const response = await fetch("resources.json");
+        const data = await response.json();
+
+        // 2. Store JSON data in the global resources array
+        resources = data;
+
+        // 3. Render the table for the first time
+        renderTable();
+
+        // 4. Add the submit event listener to the form
+        resourceForm.addEventListener("submit", handleAddResource);
+
+        // 5. Add the click event listener for delete/edit buttons
+        resourcesTbody.addEventListener("click", handleTableClick);
+
+    } catch (error) {
+        console.error("Error loading resources:", error);
+    }
 }
 
 // --- Initial Page Load ---
