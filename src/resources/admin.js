@@ -37,23 +37,23 @@ const resourcesTbody = document.querySelector("#resources-tbody");
  */
 function createResourceRow(resource) {
   // ... your implementation here ...
-  function createResourceRow(resource) {
     const { id, title, description } = resource;
 
     // Create a <tr> element
     const tr = document.createElement("tr");
 
     // Fill the row with required <td>s
-    tr.innerHTML = `
-        <td>${title}</td>
-        <td>${description}</td>
-        <td>
-            <button class="edit-btn" data-id="${id}">Edit</button>
-            <button class="delete-btn" data-id="${id}">Delete</button>
-        </td>
-    `;
+      const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${title}</td>
+    <td>${description}</td>
+    <td>
+      <button class="edit-btn" data-id="${id}">Edit</button>
+      <button class="delete-btn" data-id="${id}">Delete</button>
+    </td>
+  `;
 
-    return tr;
+  return tr;
 }
   
 /**
@@ -100,13 +100,12 @@ function handleAddResource(event) {
     const link = document.getElementById("resource-link").value;
 
     // 3. Create new resource object with unique ID
-    const newResource = {
-        id: `res_${Date.now()}`,
-        title: title,
-        description: description,
-        link: link
-    };
-
+  const newResource = {
+    id: `res_${Date.now()}`,
+    title: title,
+    description: description,
+    link: link
+  };
     // 4. Add to global resources array
     resources.push(newResource);
 
@@ -116,7 +115,6 @@ function handleAddResource(event) {
     // 6. Reset the form
     resourceForm.reset();
 }
-  resourceForm.addEventListener("submit", handleAddResource);
 
 /**
  * TODO: Implement the handleTableClick function.
@@ -143,8 +141,6 @@ function handleTableClick(event) {
         renderTable();
     }
 }
-
-resourcesTbody.addEventListener("click", handleTableClick);
 
 /**
  * TODO: Implement the loadAndInitialize function.
