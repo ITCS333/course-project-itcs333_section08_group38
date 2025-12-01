@@ -27,24 +27,23 @@
         <!-- TODO: Use an 'article' to display the main resource information. -->
        <article>
             <!-- TODO: Add a paragraph ('p') for the resource description (use dummy text). -->
-          <p>
+          <p id="resource-description">
                     This resource provides an overview of Chapter 1, covering the basic concepts
                     and key ideas discussed in the lecture.
                 </p>
             <!-- TODO: Add an anchor tag ('a') that links to the actual resource URL (use a dummy link like "https://example.com").
                  - Text should be "Access Resource Material".
                  - Consider adding 'target="_blank"' to open it in a new tab. -->
-           <a href="https://example.com" target="_blank">
-                    Access Resource Material
-                </a>
+              <a id="resource-link" href="https://example.com" target="_blank">
+                Access Resource Material
+            </a>
         <!-- End of article. -->
           </article>
             </section>
 
         <!-- Section 2: Discussion Forum -->
         <!-- TODO: Create a 'section' for the discussion, with an 'id' of "discussion-forum". -->
-   <section id="discussion-forum">
-
+     <section id="discussion-forum">
             <!-- TODO: Add a sub-heading ('h2') "Discussion". -->
     <h2>Discussion</h2>
 
@@ -59,19 +58,20 @@
                     <!-- TODO: Use a 'p' for the comment text (e.g., "This was very helpful, thanks!"). -->
                     <!-- TODO: Use a 'footer' to show the author (e.g., "Posted by: Jane Doe"). -->
                 <!-- End of comment article. -->
-               <article class="comment">
-            <p>This was very helpful, thanks!</p>
-            <footer>Posted by: Jane Doe</footer>
-        </article>
+           <div id="comment-list">
+            <article class="comment">
+                <p>This was very helpful, thanks!</p>
+                <footer>Posted by: Jane Doe</footer>
+            </article>
 
                 <!-- Example Comment 2: -->
                 <!-- TODO: Create another 'article' for a second comment. -->
             <!-- End of comment list container. -->
      <article class="comment">
-            <p>I found this material easy to follow and very informative.</p>
-            <footer>Posted by: John Smith</footer>
-        </article>
-               </div>
+                <p>I found this material easy to follow and very informative.</p>
+                <footer>Posted by: John Smith</footer>
+            </article>
+        </div>
 
             <!-- Subsection 2.2: Add a Comment Form -->
             <!-- TODO: Create a 'form' for users to post new comments. Action can be '#'. -->
@@ -84,13 +84,13 @@
                     <!-- TODO: Add a 'label' and 'textarea' for the comment box.
                          - label 'for': "new-comment"
                          - textarea 'id': "new-comment", required -->
-          <label for="new-comment">Your Comment:</label>
-            <textarea id="new-comment" required></textarea>
+                  <label for="new-comment">Your Comment:</label>
+                <textarea id="new-comment" required></textarea>
           
                     
                     <!-- TODO: Add a 'button' to submit the comment.
                          - type="submit", Text: "Post Comment" -->
-                   <button type="submit">Post Comment</button>
+          <button type="submit">Post Comment</button>
                 <!-- End of fieldset. -->
             <!-- End of form. -->
         <!-- End of discussion section. -->
@@ -99,5 +99,6 @@
    </section>
     <!-- End of main. -->
  </main>
+  <script src="details.js" defer></script>
 </body>
 </html>
