@@ -13,7 +13,7 @@
 
 // --- Element Selections ---
 // TODO: Select the section for the resource list ('#resource-list-section').
-const resourceListSection = document.getElementById("#resource-list-section");
+const resourceListSection = document.getElementById("resource-list-section");
 
 // --- Functions ---
 
@@ -26,11 +26,9 @@ const resourceListSection = document.getElementById("#resource-list-section");
  */
 function createResourceArticle(resource) {
   // ... your implementation here ...
-    // Create <article>
-    const article = document.createElement("article");
+   const article = document.createElement("article");
     article.classList.add("resource-item");
 
-    // Fill article content
     article.innerHTML = `
         <h3>${resource.title}</h3>
         <p>${resource.description}</p>
@@ -55,28 +53,26 @@ function createResourceArticle(resource) {
  */
 async function loadResources() {
   // ... your implementation here ...
-  try {
-    // 1. Use fetch() to get data from 'resources.json'
-    const response = await fetch("resources.json");
+try {
+        // 1. Fetch resources.json
+        const response = await fetch("resources.json");
 
-    // 2. Parse the JSON response into an array
-    const resources = await response.json();
+        // 2. Parse JSON
+        const resources = await response.json();
 
-    // 3. Clear any existing content from `listSection`
-    listSection.innerHTML = "";
+        // 3. Clear previous content
+        resourceListSection.innerHTML = "";
 
-    // 4. Loop through the resources array
-    resources.forEach((resource) => {
-      // - Call createResourceArticle()
-      const articleEl = createResourceArticle(resource);
+        // 4. Create articles for each resource
+        resources.forEach(resource => {
+            const articleEl = createResourceArticle(resource);
+            resourceListSection.appendChild(articleEl);
+        });
 
-      // - Append the returned <article> element to `listSection`
-      listSection.appendChild(articleEl);
-    });
-  } catch (error) {
-    console.error("Error loading resources:", error);
-    listSection.innerHTML = "<p>Failed to load resources.</p>";
-  }
+    } catch (error) {
+        console.error("Error loading resources:", error);
+        resourceListSection.innerHTML = "<p>Failed to load resources.</p>";
+    }
 }
 // --- Initial Page Load ---
 // Call the function to populate the page.
