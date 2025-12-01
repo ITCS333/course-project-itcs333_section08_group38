@@ -16,12 +16,6 @@
 const resourceListSection = document.getElementById("resource-list-section");
 
 // --- Functions ---
-resourceListSection.innerHTML = "<h2>Available Materials</h2>";
-
-resources.forEach(resource => {
-    const articleEl = createResourceArticle(resource);
-    resourceListSection.appendChild(articleEl);
-});
 
 /**
  * TODO: Implement the createResourceArticle function.
