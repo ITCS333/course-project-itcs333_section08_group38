@@ -36,11 +36,11 @@ const resourcesTbody = document.querySelector("#resources-tbody");
  * - A "Delete" button with class "delete-btn" and `data-id="${id}"`.
  */
 function createResourceRow(resource) {
-  // ... your implementation here ...
-    const { id, title, description } = resource;
+  const { id, title, description } = resource;
 
-    // Fill the row with required <td>s
-      const tr = document.createElement("tr");
+  // Create <tr>
+  const tr = document.createElement("tr");
+
   tr.innerHTML = `
     <td>${title}</td>
     <td>${description}</td>
@@ -52,6 +52,7 @@ function createResourceRow(resource) {
 
   return tr;
 }
+
   
 /**
  * TODO: Implement the renderTable function.
