@@ -689,7 +689,7 @@ try {
         // Call getCommentsByResourceId()
         if ($action === 'comments') {
         if (!isset($_GET['resource_id'])) {
-                sendResponse(["success" => false, "message" => "Missing resource_id"], 400);
+                return sendResponse(["success" => false, "message" => "Missing resource_id"], 400);
             }
             return getCommentsByResourceId($db, $_GET['resource_id']);
         }
@@ -738,7 +738,7 @@ try {
         if ($action === 'delete_comment') {
             $commentId = $_GET['comment_id'] ?? $data['comment_id'] ?? null;
             if (!$commentId) {
-                sendResponse(["success" => false, "message" => "Missing comment_id"], 400);
+                return sendResponse(["success" => false, "message" => "Missing comment_id"], 400);
             } else {
                 return deleteComment($db, $commentId);
             }
@@ -749,7 +749,7 @@ try {
         // Call deleteResource()
         $resourceId = $_GET['id'] ?? $data['id'] ?? null;
         if (!$resourceId) {
-            sendResponse(["success" => false, "message" => "Missing id"], 400);
+            return sendResponse(["success" => false, "message" => "Missing id"], 400);
         } else {
             return deleteResource($db, $resourceId); 
         }
