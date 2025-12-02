@@ -1,1 +1,72 @@
 /* CSS Styles */
+
+/*the texts in the whole website + background*/
+body {
+    background: linear-gradient(to bottom, #eaf2fb 0%, #cfddee 100%);
+    background-attachment: fixed;
+}
+
+/*headings*/
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Times New Roman", Times, serif;
+    color:black;
+    font-weight: bold;
+}
+
+/*Tables*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black; 
+}
+table th {
+    border: 2px solid black; 
+    padding: 10px;
+    background-color: #d4edffee;
+}
+table td {
+    border: 2px solid black; 
+    padding: 10px;
+    background-color: #e4f4ffee;
+}
+
+/*Hyper links*/
+a {
+    color: #1a73e8;
+    text-decoration: none;
+    transition: 0.2s;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:visited {
+    color: rgba(76, 11, 76, 0.753); 
+}
+
+/*Submit Button*/
+button,input[type="submit"] {
+    background-color: #b9cce8;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    color: black;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*Forms*/
+fieldset {
+    border: 2px solid #444;
+    padding: 20px;
+    border-radius: 6px;
+    background: #d4edffee;
+}
+legend {
+    font-weight: bold;
+    padding: 0 10px;
+}
+label {
+    font-weight: bold;
+    margin-right: 10px;
+}
