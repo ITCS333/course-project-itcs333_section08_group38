@@ -657,7 +657,7 @@ function deleteComment($db, $commentId) {
     // TODO: Prepare DELETE query
     // DELETE FROM comments WHERE id = ?
       $sql  = "DELETE FROM comments WHERE id = ?";
-    $stmt = $db->prepare($sql)
+    $stmt = $db->prepare($sql);
     
     // TODO: Bind the comment_id parameter
     $stmt->bindParam(1, $commentId, PDO::PARAM_INT);
