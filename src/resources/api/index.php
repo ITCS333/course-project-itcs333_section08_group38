@@ -689,9 +689,9 @@ try {
         // Call getCommentsByResourceId()
         if ($action === 'comments') {
         if (!isset($_GET['resource_id'])) {
-                return sendResponse(["success" => false, "message" => "Missing resource_id"], 400);
+                sendResponse(["success" => false, "message" => "Missing resource_id"], 400);
             }
-            return getCommentsByResourceId($db, $_GET['resource_id']);
+            getCommentsByResourceId($db, $_GET['resource_id']);
         }
 
         // If id parameter exists, get single resource
@@ -700,9 +700,9 @@ try {
         // Otherwise, get all resources
         // TODO: Call getAllResources()    
         if (isset($_GET['id'])) {
-            return getResourceById($db, $_GET['id']);
+            getResourceById($db, $_GET['id']);
         } else {
-            return getAllResources($db);
+            getAllResources($db);
         }
 
         
@@ -716,16 +716,16 @@ try {
         // Otherwise, create a new resource
         // TODO: Call createResource()
         if ($action === 'comment') {
-            return createComment($db, $data);
+            createComment($db, $data);
         } else {
-            return createResource($db, $data);
+            createResource($db, $data);
         }
         
     } elseif ($method === 'PUT') {
         // TODO: Update a resource
         // Call updateResource()
         $data = json_decode(file_get_contents("php://input"), true);
-        return updateResource($db, $data);        
+        updateResource($db, $data);        
         
     } elseif ($method === 'DELETE') {
         // TODO: Check the action parameter to determine which function to call
@@ -738,9 +738,9 @@ try {
         if ($action === 'delete_comment') {
             $commentId = $_GET['comment_id'] ?? $data['comment_id'] ?? null;
             if (!$commentId) {
-                return sendResponse(["success" => false, "message" => "Missing comment_id"], 400);
+                sendResponse(["success" => false, "message" => "Missing comment_id"], 400);
             } else {
-                return deleteComment($db, $commentId);
+                deleteComment($db, $commentId);
             }
         }
 
@@ -749,9 +749,9 @@ try {
         // Call deleteResource()
         $resourceId = $_GET['id'] ?? $data['id'] ?? null;
         if (!$resourceId) {
-            return sendResponse(["success" => false, "message" => "Missing id"], 400);
+            sendResponse(["success" => false, "message" => "Missing id"], 400);
         } else {
-            return deleteResource($db, $resourceId); 
+            deleteResource($db, $resourceId); 
         }
         
     } else {
