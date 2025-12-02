@@ -4,6 +4,7 @@
 body {
     background: linear-gradient(to bottom, #eaf2fb 0%, #cfddee 100%);
     background-attachment: fixed;
+    margin: 40px;
 }
 
 /*headings*/
