@@ -94,33 +94,32 @@ label {
     font-style: italic;
 }
 
-/*styling the assignment list section*/
-/* الحاوية الأساسية للسكشن */
+/*Assignment list section formatting*/
 #assignment-list-section {
-    padding: 20px;
-    max-width: 800px;
-    margin-left: 2;
+    margin-left: auto;
+    padding: 0 10px;
 }
 
-/* كل Assignment Card */
 #assignment-list-section article {
     background: #ffffff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    border-left: 5px solid #1e88e5; /* خط جانبي مميز */
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    padding: 25px 30px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border-left: 5px solid #1a73e8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: "Times New Roman", Times, serif;
 }
 
 #assignment-list-section article:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 7px 20px rgba(0,0,0,0.18);
 }
 
 #assignment-list-section article h2 {
-    margin: 0 0 10px;
-    color: #1e3d59;
+    margin: 0 0 12px;
+    font-size: 1.7rem;
+    color: #123456;
 }
 
 #assignment-list-section article p:first-of-type {
@@ -131,20 +130,21 @@ label {
 
 #assignment-list-section article p {
     color: #555;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 #assignment-list-section article a {
     display: inline-block;
-    margin-top: 10px;
-    padding: 8px 14px;
-    background-color: #1e88e5;
-    color: white;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background-color: #1a73e8;
+    color: #fff;
     border-radius: 6px;
     text-decoration: none;
-    transition: background 0.2s ease;
+    font-weight: bold;
+    transition: background 0.25s ease;
 }
 
 #assignment-list-section article a:hover {
-    background-color: #1565c0;
+    background-color: #0f54b5;
 }
