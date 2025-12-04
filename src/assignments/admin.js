@@ -127,7 +127,7 @@ function handleTableClick(event) {
  * 5. Add the 'click' event listener to `assignmentsTableBody` (calls `handleTableClick`).
  */
 async function loadAndInitialize() {
-  const response = await fetch('../api/assignments.json');
+  const response = await fetch('api/assignments.json');
   assignments = await response.json();
   renderTable();
 
