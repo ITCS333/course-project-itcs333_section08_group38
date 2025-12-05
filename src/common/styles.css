@@ -148,3 +148,74 @@ label {
 #assignment-list-section article a:hover {
     background-color: #0f54b5;
 }
+
+/*week list section formatting*/
+#week-list-section {
+    margin-left: auto;
+    padding: 0 10px;
+}
+#week-list-section article {
+    background: #ffffff;
+    padding: 25px 30px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border-left: 5px solid #1a73e8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: "Times New Roman", Times, serif;
+}
+#week-list-section article:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(0,0,0,0.18);
+}
+
+#week-list-section article h2 {
+    margin: 0 0 12px;
+    font-size: 1.7rem;
+    color: #123456;
+}
+
+#week-list-section article p:first-of-type {
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+#week-list-section article p {
+    color: #555;
+    line-height: 1.6;
+}
+
+#week-list-section article a {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background-color: #1a73e8;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.25s ease;
+}
+
+#week-list-section article a:hover {
+    background-color: #0f54b5;
+}
+
+/*input*/
+input[type="text"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 5px;
+    margin-top: 6px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font-size: 14px;
+    background: #fafafa;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
