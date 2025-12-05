@@ -61,17 +61,19 @@ function getWeekIdFromURL() {
 function renderWeekDetails(week) {
   // ... your implementation here ...
   weekTitle.textContent = week.title;
-  weekStartDate.textContent = "Starts on: " + week.startDate;
+  weekStartDate.textContent = "Starts on: " + week.start_date;
   weekDescription.textContent = week.description;
   weekLinksList.innerHTML = '';
-  week.links.forEach(link => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href=link;
-    a.textContent=link;
-    li.appendChild(a);
-    weekLinksList.appendChild(li);
-  });
+  if(week.links && Array.isArray(week.links) ){
+    week.links.forEach(link => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href=link;
+      a.textContent=link;
+      li.appendChild(a);
+      weekLinksList.appendChild(li);
+    });
+  }
 }
 
 /**
@@ -124,7 +126,7 @@ function renderComments() {
  * 6. Call `renderComments()` to refresh the list.
  * 7. Clear the `newCommentText` textarea.
  */
-function handleAddComment(event) {
+async function handleAddComment(event) {
   // ... your implementation here ...
   event.preventDefault();
   if(newCommentText.value.trim() === ''){
@@ -132,12 +134,31 @@ function handleAddComment(event) {
   }
   const commentText = newCommentText.value;
   const newComment = {
+    'week_id': currentWeekId,
     'author': 'Student',
     'text': commentText
   };
-  currentComments.push(newComment);
-  renderComments();
-  newCommentText.value = '';
+
+  try {
+    const response = await fetch('./api/?resource=comments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newComment)
+    });
+    const result = await response.json();
+    if (result.success) {
+      currentComments.push(result.data);
+      renderComments();
+      newCommentText.value = '';
+    } else {
+      alert('Error adding comment: ' + result.error);
+    }
+  } catch (error) {
+    console.log('Error adding comment:', error);
+    alert('Error adding comment');
+  }
 }
 
 /**
@@ -164,24 +185,28 @@ async function initializePage() {
     weekTitle.textContent = "Week not found.";
     return;
   }
-  const [weeksResponse, commentsResponse] = await Promise.all([
-    fetch('./api/weeks.json'),
-    fetch('./api/comments.json')
-  ]);
-  const weeksData = await weeksResponse.json();
-  const commentsData = await commentsResponse.json();
-  const week = weeksData.find(w => w.id === currentWeekId);
-  if(commentsData[currentWeekId]){
-    currentComments = commentsData[currentWeekId];
-  } else {
-    currentComments = [];
-  }
-  if(week){
-    renderWeekDetails(week);
-    renderComments();
-    commentForm.addEventListener('submit', handleAddComment);
-  } else {
-    weekTitle.textContent = "Week not found.";
+  
+  try {
+    const [weeksResponse, commentsResponse] = await Promise.all([
+      fetch(`./api/?resource=weeks&id=${currentWeekId}`),
+      fetch(`./api/?resource=comments&id=${currentWeekId}`)
+    ]);
+    const weeksResult = await weeksResponse.json();
+    const commentsResult = await commentsResponse.json();
+    
+    const week = weeksResult.data;
+    currentComments = commentsResult.data || [];
+    
+    if(week){
+      renderWeekDetails(week);
+      renderComments();
+      commentForm.addEventListener('submit', handleAddComment);
+    } else {
+      weekTitle.textContent = "Week not found.";
+    }
+  } catch (error) {
+    console.log('Error loading page:', error);
+    weekTitle.textContent = "Error loading week data.";
   }
 }
 
