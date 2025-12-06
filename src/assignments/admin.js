@@ -38,12 +38,12 @@ function createAssignmentRow(assignment) {
     const tr = document.createElement("tr");
 
     tr.innerHTML = `
-        <td>${assignment.title}</td>
-        <td>${assignment.dueDate}</td>
-        <td>
-            <button class="edit-btn" data-id="${assignment.id}" type="button">Edit</button>
-            <button class="delete-btn" data-id="${assignment.id}" type="button">Delete</button>
-        </td>
+      <td>${assignment.title}</td>
+      <td>${assignment.dueDate}</td>
+      <td>
+        <button class="edit-btn" data-id="${assignment.id}" type="button">Edit</button>
+        <button class="delete-btn" data-id="${assignment.id}" type="button">Delete</button>
+      </td>
     `;
 
     return tr;
@@ -86,11 +86,11 @@ function handleAddAssignment(event) {
     const files = document.getElementById("assignment-files").value.trim();
 
     const newAssignment = {
-        id: `asg_${Date.now()}`,
-        title,
-        description,
-        dueDate,
-        files
+      id: `asg_${Date.now()}`,
+      title,
+      description,
+      dueDate,
+      files
     };
 
     assignments.push(newAssignment);
@@ -110,9 +110,14 @@ function handleAddAssignment(event) {
  */
 function handleTableClick(event) {
     if (event.target.classList.contains("delete-btn")) {
-        const id = event.target.dataset.id;
-        assignments = assignments.filter(a => a.id !== id);
-        renderTable();
+      const id = event.target.dataset.id;
+      assignments = assignments.filter(a => a.id !== id);
+      renderTable();
+    }
+
+    if (event.target.classList.contains("edit-btn")) {
+      const id = event.target.dataset.id;
+      window.location.href = `details.html?id=${id}`;
     }
 }
 
@@ -127,7 +132,7 @@ function handleTableClick(event) {
  * 5. Add the 'click' event listener to `assignmentsTableBody` (calls `handleTableClick`).
  */
 async function loadAndInitialize() {
-  const response = await fetch('../api/assignments.json');
+  const response = await fetch('api/assignments.json');
   assignments = await response.json();
   renderTable();
 

@@ -12,8 +12,10 @@ Lulwa Ahmed Alsubaue -202301362 <br>
 | Student Name | University ID | Tasks Completed |
 |--------------|---------------|------------------|
 | Sara Ismaeel | 202306311 | Task 1: Homepage, Admin Portal & User Management |
-| Lulwa Abdullateef | 202203695 | Task 2: Course Resources |
+| Rehan Saleh | 202203168| Task 2: Course Resources |
 | Zainab Abbas | 202207120 | Task 3: Weekly Breakdown |
-| Rehan Saleh| 202203168 | Task 4: Assignments |
+| Lulwa Abdullateef | 202203695 | Task 4: Assignments |
 | Lulwa Alsubaue | 202301362 | Task 5: General Discussion Boards |
 ## A link to your live, hosted application on Replit.
+
+[Our Live Website application](https://replit.com/@lulwafares/itcs333section08group38?v=1)

@@ -13,6 +13,7 @@
 
 // --- Element Selections ---
 // TODO: Select the section for the resource list ('#resource-list-section').
+const resourceListSection = document.getElementById("resource-list-section");
 
 // --- Functions ---
 
@@ -25,6 +26,18 @@
  */
 function createResourceArticle(resource) {
   // ... your implementation here ...
+   const article = document.createElement("article");
+    article.classList.add("resource-item");
+
+    article.innerHTML = `
+        <h3>${resource.title}</h3>
+        <p>${resource.description}</p>
+        <a href="details.html?id=${resource.id}">
+            View Resource & Discussion
+        </a>
+    `;
+
+    return article;
 }
 
 /**
@@ -40,8 +53,27 @@ function createResourceArticle(resource) {
  */
 async function loadResources() {
   // ... your implementation here ...
-}
+try {
+        // 1. Fetch resources.json
+        const response = await fetch("resources.json");
 
+        // 2. Parse JSON
+        const resources = await response.json();
+
+        // 3. Clear previous content
+        resourceListSection.innerHTML = "";
+
+        // 4. Create articles for each resource
+        resources.forEach(resource => {
+            const articleEl = createResourceArticle(resource);
+            resourceListSection.appendChild(articleEl);
+        });
+
+    } catch (error) {
+        console.error("Error loading resources:", error);
+        resourceListSection.innerHTML = "<p>Failed to load resources.</p>";
+    }
+}
 // --- Initial Page Load ---
 // Call the function to populate the page.
 loadResources();

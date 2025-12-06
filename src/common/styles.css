@@ -1,1 +1,221 @@
 /* CSS Styles */
+
+/*the texts in the whole website + background*/
+body {
+    background: linear-gradient(to bottom, #eaf2fb 0%, #cfddee 100%);
+    background-attachment: fixed;
+    margin: 40px;
+}
+
+/*headings*/
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Times New Roman", Times, serif;
+    color:black;
+    font-weight: bold;
+}
+
+/*Tables*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black; 
+}
+table th {
+    border: 2px solid black; 
+    padding: 10px;
+    background-color: #d4edffee;
+}
+table td {
+    border: 2px solid black; 
+    padding: 10px;
+    background-color: #e4f4ffee;
+}
+
+/*Hyper links*/
+a {
+    color: #1a73e8;
+    text-decoration: none;
+    transition: 0.2s;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:visited {
+    color: rgba(76, 11, 76, 0.753); 
+}
+
+/*Submit Button*/
+button,input[type="submit"] {
+    background-color: #b9cce8;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    color: black;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*Forms*/
+fieldset {
+    border: 2px solid #444;
+    padding: 20px;
+    border-radius: 6px;
+    background: #d4edffee;
+}
+legend {
+    font-weight: bold;
+    padding: 0 10px;
+}
+label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/*styling the comment list*/
+#comment-list article {
+    background: #fff;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4A6FA5;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#comment-list article p {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #222;
+}
+
+#comment-list article footer {
+    font-size: 0.9rem;
+    color: #555;
+    font-style: italic;
+}
+
+/*Assignment list section formatting*/
+#assignment-list-section {
+    margin-left: auto;
+    padding: 0 10px;
+}
+
+#assignment-list-section article {
+    background: #ffffff;
+    padding: 25px 30px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border-left: 5px solid #1a73e8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: "Times New Roman", Times, serif;
+}
+
+#assignment-list-section article:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(0,0,0,0.18);
+}
+
+#assignment-list-section article h2 {
+    margin: 0 0 12px;
+    font-size: 1.7rem;
+    color: #123456;
+}
+
+#assignment-list-section article p:first-of-type {
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+#assignment-list-section article p {
+    color: #555;
+    line-height: 1.6;
+}
+
+#assignment-list-section article a {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background-color: #1a73e8;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.25s ease;
+}
+
+#assignment-list-section article a:hover {
+    background-color: #0f54b5;
+}
+
+/*week list section formatting*/
+#week-list-section {
+    margin-left: auto;
+    padding: 0 10px;
+}
+#week-list-section article {
+    background: #ffffff;
+    padding: 25px 30px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border-left: 5px solid #1a73e8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: "Times New Roman", Times, serif;
+}
+#week-list-section article:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(0,0,0,0.18);
+}
+
+#week-list-section article h2 {
+    margin: 0 0 12px;
+    font-size: 1.7rem;
+    color: #123456;
+}
+
+#week-list-section article p:first-of-type {
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+#week-list-section article p {
+    color: #555;
+    line-height: 1.6;
+}
+
+#week-list-section article a {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background-color: #1a73e8;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.25s ease;
+}
+
+#week-list-section article a:hover {
+    background-color: #0f54b5;
+}
+
+/*input*/
+input[type="text"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 5px;
+    margin-top: 6px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font-size: 14px;
+    background: #fafafa;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
