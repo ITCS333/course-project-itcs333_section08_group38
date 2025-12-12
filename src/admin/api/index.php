@@ -185,28 +185,80 @@ function createStudent($db, $data) {
     // TODO: Validate required fields
     // Check if student_id, name, email, and password are provided
     // If any field is missing, return error response with 400 status
+    if (!isset($data['student_id']) || 
+        !isset($data['name']) || 
+        !isset($data['email']) || 
+        !isset($data['password']) || empty($data['student_id']) || 
+        empty($data['name']) || empty($data['email']) || 
+        empty($data['password']))
+    {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Missing required information'
+        ],400);
+    }
     
     // TODO: Sanitize input data
     // Trim whitespace from all fields
     // Validate email format using filter_var()
+    $student_id = trim($data['student_id']);
+    $name = trim($data['name']);
+    $email = trim($data['email']);
+    $password = trim($data['password']);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Invalid email format'
+        ],400);
+    }
     
     // TODO: Check if student_id or email already exists
     // Prepare and execute a SELECT query to check for duplicates
     // If duplicate found, return error response with 409 status (Conflict)
+    $stmt= $db ->prepare("SELECT * FROM students WHERE student_id = ? OR email = ?");
+    $stmt->execute([$student_id,$email]);
+
+    if($stmt-> fetch(PDO::FETCH_ASSOC))
+    {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Student ID or Email already exists'
+        ],409);
+    }
     
     // TODO: Hash the password
     // Use password_hash() with PASSWORD_DEFAULT
+    $hashedPassword = password_hash($password , PASSWORD_DEFAULT);
     
     // TODO: Prepare INSERT query
+    $stmt = $db ->prepare("INSERT INTO students (student_id, name, email, password, created_at) VALUES (?, ?, ?, ?, NOW())");
     
     // TODO: Bind parameters
     // Bind student_id, name, email, and hashed password
-    
+    $stmt -> bindParam (1, $student_id);
+    $stmt -> bindParam (2, $name);
+    $stmt -> bindParam (3, $email);
+    $stmt -> bindParam (4, $hashedPassword);
     // TODO: Execute the query
+    $check = $stmt -> execute();
     
     // TODO: Check if insert was successful
     // If yes, return success response with 201 status (Created)
     // If no, return error response with 500 status
+    
+    if($check){
+        sendResponse([
+            'status' => 'success',
+            'message' => 'Student created successfully'
+        ],201);
+    } else {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Failed to create student'
+        ],500);
+    }
+
+
 }
 
 
@@ -222,30 +274,53 @@ function createStudent($db, $data) {
 function updateStudent($db, $data) {
     // TODO: Validate that student_id is provided
     // If not, return error response with 400 status
+    if (!isset($data['student_id'])|| empty($data['student_id'])) {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Missing student_id'
+        ],400);
+        return;
+    }
     
     // TODO: Check if student exists
     // Prepare and execute a SELECT query to find the student
     // If not found, return error response with 404 status
-    
+    $stmt = $db->prepare("SELECT * FROM students WHERE student_id = ?");
+    $stmt -> execute([$data['student_id']]);
+    if(!$stmt-> fetch(PDO::FETCH_ASSOC)){
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Student not found'
+        ],404);
+        return;
+    }
     // TODO: Build UPDATE query dynamically based on provided fields
     // Only update fields that are provided in the request
-    
-    // TODO: If email is being updated, check if new email already exists
-    // Prepare and execute a SELECT query
-    // Exclude the current student from the check
-    // If duplicate found, return error response with 409 status
-    
-    // TODO: Bind parameters dynamically
-    // Bind only the parameters that are being updated
-    
-    // TODO: Execute the query
-    
-    // TODO: Check if update was successful
-    // If yes, return success response
-    // If no, return error response with 500 status
+
+   $allowedFields = ['name', 'email'];
+        $query = "UPDATE students SET ";
+        $params = [];
+
+        foreach ($allowedFields as $field) {
+            if (isset($data[$field])) {
+                $value = trim((string)$data[$field]);
+                if ($value !== '') {
+                    if (count($params) > 0) {
+                        $query .= ", ";
+                    }
+                    $query .= "$field = ? ";
+                    $params[] = $value;
+                }
+            }
+        }
+        if (count($params) === 0) {
+    sendResponse([
+        'status' => 'error',
+        'message' => 'No fields provided to update'
+    ], 400);
+    return;
 }
-
-
+}
 /**
  * Function: Delete a student
  * Method: DELETE
@@ -256,20 +331,50 @@ function updateStudent($db, $data) {
 function deleteStudent($db, $studentId) {
     // TODO: Validate that student_id is provided
     // If not, return error response with 400 status
-    
+    if (!$studentId || trim($studentId) === '') {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Missing student_id'
+        ],400);
+        return;
+    }
     // TODO: Check if student exists
     // Prepare and execute a SELECT query
     // If not found, return error response with 404 status
+    $stmt = $db->prepare("SELECT * FROM students WHERE student_id = ?");
+    $stmt -> execute([$studentId]);
+    if(!$stmt-> fetch(PDO::FETCH_ASSOC)){
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Student not found'
+        ],404);
+        return;
+    }
     
     // TODO: Prepare DELETE query
+    $stmt = $db->prepare("DELETE FROM students WHERE student_id = ?");
     
     // TODO: Bind the student_id parameter
+    $stmt->bindParam(1, $studentId);
     
     // TODO: Execute the query
+   $stmt -> execute();
     
     // TODO: Check if delete was successful
     // If yes, return success response
     // If no, return error response with 500 status
+    if($stmt -> rowCount() > 0){
+        sendResponse([
+            'status' => 'success',
+            'message' => 'Student deleted successfully'
+        ]);
+    } else {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Failed to delete student'
+        ],500);
+    }
+
 }
 
 
