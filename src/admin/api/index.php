@@ -29,29 +29,47 @@
 // Allow cross-origin requests (CORS) if needed
 // Allow specific HTTP methods (GET, POST, PUT, DELETE, OPTIONS)
 // Allow specific headers (Content-Type, Authorization)
+header("Content-Type: application/json");
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 
 // TODO: Handle preflight OPTIONS request
 // If the request method is OPTIONS, return 200 status and exit
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 
 // TODO: Include the database connection class
 // Assume the Database class has a method getConnection() that returns a PDO instance
-
-
 // TODO: Get the PDO database connection
+require_once 'Database.php';
+$database = new Database();
+$db = $database->getConnection();
 
 
 // TODO: Get the HTTP request method
 // Use $_SERVER['REQUEST_METHOD']
-
+$method = $_SERVER['REQUEST_METHOD'];
 
 // TODO: Get the request body for POST and PUT requests
 // Use file_get_contents('php://input') to get raw POST data
 // Decode JSON data using json_decode()
+                 
+$rawData = file_get_contents("php://input");
+$data = json_decode($rawData, true)??[];
+
 
 
 // TODO: Parse query parameters for filtering and searching
+$search = $_GET['search'] ?? null;
+$sort = $_GET['sort'] ?? null;
+$order = $_GET['order'] ?? null;
+$studentId = $_GET['student_id'] ?? null;
+$action = $_GET['action'] ?? null;
 
 
 /**
@@ -64,26 +82,57 @@
  *   - order: Optional sort order (asc or desc)
  */
 function getStudents($db) {
+    $query="SELECT id, student_id, name, email, created_at FROM students";
     // TODO: Check if search parameter exists
     // If yes, prepare SQL query with WHERE clause using LIKE
     // Search should work on name, student_id, and email fields
-    
+    if(isset($_GET['search'])){
+        $search=$_GET['search'];
+        $like="%".$search."%";
+        $query.=" WHERE name LIKE ? OR student_id LIKE ? OR email LIKE ?";
+    } 
     // TODO: Check if sort and order parameters exist
     // If yes, add ORDER BY clause to the query
     // Validate sort field to prevent SQL injection (only allow: name, student_id, email)
     // Validate order to prevent SQL injection (only allow: asc, desc)
-    
+    if(isset($_GET['sort'])){
+        $sort=$_GET['sort'];
+        $allowedSortFields = ['name', 'student_id', 'email'];
+        $allowedOrder = ['asc', 'desc'];
+        if(in_array($sort,$allowedSortFields)){
+            $query.=" ORDER BY ".$sort;
+            
+            if(isset($_GET['order']) ){
+                $order=$_GET['order'];
+                if(in_array($order,$allowedOrder)){ 
+                $query.=" ".$order;}
+            }
+        }
+    }
     // TODO: Prepare the SQL query using PDO
     // Note: Do NOT select the password field
-    
+    $stmt = $db->prepare($query);
+
     // TODO: Bind parameters if using search
-    
+    if(isset($_GET['search'])){
+        $stmt->bindParam(1,$like);
+        $stmt->bindParam(2,$like);
+        $stmt->bindParam(3,$like);
+    }
+
     // TODO: Execute the query
+    $stmt->execute();
     
     // TODO: Fetch all results as an associative array
+    $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // TODO: Return JSON response with success status and data
+    sendResponse([
+        'status' => 'success',
+        'data' => $students
+    ]);
 }
+ 
 
 
 /**
@@ -95,16 +144,30 @@ function getStudents($db) {
  */
 function getStudentById($db, $studentId) {
     // TODO: Prepare SQL query to select student by student_id
-    
+    $stmt = $db->prepare("SELECT * FROM students WHERE student_id = ?");
     // TODO: Bind the student_id parameter
-    
+    $stmt->bindParam(1, $studentId);
+
     // TODO: Execute the query
-    
+    $stmt ->execute();
     // TODO: Fetch the result
+    $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
     
     // TODO: Check if student exists
     // If yes, return success response with student data
     // If no, return error response with 404 status
+    if($student){
+        sendResponse([
+            'status' => 'success',
+            'data' => $student
+        ]);
+    } else {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Student not found'
+        ], 404);
+    }
 }
 
 
