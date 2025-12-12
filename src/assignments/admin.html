@@ -18,7 +18,7 @@
     <title>Manage Assignments</title>
 
     <!-- TODO: Link to your CSS framework or stylesheet. -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../common/styles.css">
 
     <script src="admin.js" defer></script>
 </head>
@@ -50,25 +50,25 @@
                          - label 'for': "assignment-title"
                          - input 'id': "assignment-title", type="text", required -->
                          <label for="assignment-title">Assignment Title</label>
-                         <input name="assignment-title"  id="assignment-title" type="text" required>
+                         <input name="assignment-title"  id="assignment-title" type="text" required><br><br>
 
                     <!-- TODO: Add a 'label' and 'textarea' for the description.
                          - label 'for': "assignment-description"
                          - textarea 'id': "assignment-description", rows="5", required -->
                          <label for="assignment-description">Assignment Description</label>
-                         <textarea name="assignment-description" id="assignment-description" rows="5" required></textarea>
+                         <textarea name="assignment-description" id="assignment-description" rows="5" required></textarea><br><br>
 
                     <!-- TODO: Add a 'label' and 'input' for the due date.
                          - label 'for': "assignment-due-date"
                          - input 'id': "assignment-due-date", type="date", required -->
                          <label for="assignment-due-date">Assignment Due Date</label>
-                         <input name="assignment-due-date" id="assignment-due-date" type="date" required>
+                         <input name="assignment-due-date" id="assignment-due-date" type="date" required><br><br>
                     
                     <!-- TODO: Add a 'label' and 'textarea' for attached files or links (one per line).
                          - label 'for': "assignment-files"
                          - textarea 'id': "assignment-files", rows="3" -->
                          <label for="assignment-files">Assignment Files</label>
-                         <textarea name="assignment-files" id="assignment-files" rows="3" ></textarea>
+                         <textarea name="assignment-files" id="assignment-files" rows="3" ></textarea><br><br>
 
 
                     <!-- TODO: Add a 'button' to submit the form.
@@ -92,11 +92,11 @@
             <!-- TODO: Create a 'table' with id "assignments-table". -->
                 <!-- TODO: Create a 'thead' and a 'tr' inside it. -->
                     <!-- TODO: Add 'th' elements for "Title", "Due Date", and "Actions". -->
-      
                 <!-- TODO: Create a 'tbody' for the data. -->
                     <!-- TODO: Add 1-2 rows of dummy data to see the structure. -->
                     <!-- Example Row 1: -->
                     <!-- TODO: Create a 'tr' for the first assignment. -->
+
                         <!-- TODO: Add 'td' cells for a title (e.g., "HTML Basics") and a due date. -->
                         
                         <!-- TODO: Add a 'td' containing the action buttons. -->
@@ -121,16 +121,16 @@
                             <td>Assignment 1: HTML Basics</td>
                             <td>2025-11-10</td>
                             <td>
-                                <button type="button">Edit</button>
-                                <button type="button">Delete</button>
+                                <button class="edit-btn" data-id=dummy1 type="button">Edit</button>
+                                <button class="delete-btn" data-id=dummy1 type="button">Delete</button>
                             </td>
                         </tr>
                         <tr>
                             <td>Assignment 2: CSS Styling</td>
                             <td>2025-11-17</td>
                             <td>
-                                <button type="button">Edit</button>
-                                <button type="button">Delete</button>
+                                <button class="edit-btn" data-id=dummy2 type="button">Edit</button>
+                                <button class="delete-btn" data-id=dummy2 type="button">Delete</button>
                             </td>                       
                         </tr>                    
                     </tbody>
@@ -142,4 +142,5 @@
     <!-- End of main. -->
     </main>
 </body>
+
 </html>

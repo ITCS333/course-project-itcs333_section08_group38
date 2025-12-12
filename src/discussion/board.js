@@ -17,9 +17,10 @@ let topics = [];
 
 // --- Element Selections ---
 // TODO: Select the new topic form ('#new-topic-form').
+const newTopicForm = document.querySelector('#new-topic-form');
 
 // TODO: Select the topic list container ('#topic-list-container').
-
+const topicListContainer = document.querySelector('#topic-list-container');
 // --- Functions ---
 
 /**
@@ -33,6 +34,32 @@ let topics = [];
  */
 function createTopicArticle(topic) {
   // ... your implementation here ...
+   const article = document.createElement('article');
+    const title = document.createElement('h3');
+  const link = document.createElement('a');
+  link.href = `topic.html?id=${topic.id}`;
+  link.textContent = topic.subject;
+  title.appendChild(link);
+   const footer = document.createElement('footer');
+  footer.textContent = `Posted by: ${topic.author} on ${topic.date}`;
+const actionsDiv = document.createElement('div');
+  const editBtn = document.createElement('button');
+  editBtn.textContent = 'Edit';
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.classList.add('delete-btn');
+  deleteBtn.dataset.id = topic.id;
+
+  actionsDiv.appendChild(editBtn);
+  actionsDiv.appendChild(deleteBtn);
+
+  
+  article.appendChild(title);
+  article.appendChild(footer);
+  article.appendChild(actionsDiv);
+
+  return article;
 }
 
 /**
@@ -45,6 +72,13 @@ function createTopicArticle(topic) {
  */
 function renderTopics() {
   // ... your implementation here ...
+
+topicListContainer.innerHTML = '';
+
+  topics.forEach(topic => {
+    const article = createTopicArticle(topic);
+    topicListContainer.appendChild(article);
+  });
 }
 
 /**
@@ -67,6 +101,22 @@ function renderTopics() {
  */
 function handleCreateTopic(event) {
   // ... your implementation here ...
+  event.preventDefault();
+
+  const subject = document.querySelector('#topic-subject').value;
+  const message = document.querySelector('#topic-message').value;
+
+  const newTopic = {
+    id: `topic_${Date.now()}`,
+    subject: subject,
+    message: message,
+    author: 'Student',
+    date: new Date().toISOString().split('T')[0]
+  };
+
+  topics.push(newTopic);
+  renderTopics();
+  newTopicForm.reset();
 }
 
 /**
@@ -81,6 +131,13 @@ function handleCreateTopic(event) {
  */
 function handleTopicListClick(event) {
   // ... your implementation here ...
+   if (event.target.classList.contains('delete-btn')) {
+    const id = event.target.dataset.id;
+
+    topics = topics.filter(topic => topic.id !== id);
+
+    renderTopics();
+  }
 }
 
 /**
@@ -95,6 +152,13 @@ function handleTopicListClick(event) {
  */
 async function loadAndInitialize() {
   // ... your implementation here ...
+  const response = await fetch('topics.json');
+  topics = await response.json();
+
+  renderTopics();
+
+  newTopicForm.addEventListener('submit', handleCreateTopic);
+  topicListContainer.addEventListener('click', handleTopicListClick);
 }
 
 // --- Initial Page Load ---

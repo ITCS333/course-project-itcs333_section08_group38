@@ -9,35 +9,62 @@
 <html lang="en">
 <head>
     <!-- TODO: Add meta tags for charset and viewport. -->
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- TODO: Add a title, e.g., "Course Resources". -->
-
+    <title>Course Resources</title>
     <!-- TODO: Link to your CSS framework or stylesheet. -->
+    <link rel="stylesheet" href="../common/styles.css">
 </head>
 <body>
 
     <!-- TODO: Create a 'header' with a main heading ('h1') "Course Resources". -->
-
+<header>
+    <h1>Course Resources</h1>
+</header>
     <!-- TODO: Create the 'main' content area. -->
+  <main>
         <!-- TODO: Create a 'section' to contain the list of resources. -->
+<section id="resource-list-section">
+<h2>Available Materials</h2>
             <!-- TODO: Add 2-3 dummy resources using the structure below. -->
 
             <!-- Example Resource 1: -->
             <!-- TODO: Use an 'article' element for each resource to group its content semantically. -->
+              <article class="resource-item">
                 <!-- TODO: Add a heading ('h2' or 'h3') for the resource title (e.g., "Chapter 1 Notes"). -->
+                 <h3>Chapter 1 Notes</h3>
                 <!-- TODO: Add a paragraph ('p') for the resource description. -->
                 <!-- TODO: Add an anchor tag ('a') that links to the detail page. 
                      - For now, the 'href' can be "resource-detail.html".
                      - The link text should be "View Resource & Discussion". -->
-            <!-- End of article. -->
+                 <!-- TODO: Add a paragraph ('p') for the resource description -->
+            <p>This resource explains the core concepts introduced in Chapter 1.</p>
 
+            <!-- TODO: Add an anchor tag ('a') that links to the detail page -->
+            <a href="details.html?id=1">View Resource & Discussion</a>
+        </article>
+
+        <!-- Example Resource 2 -->
+        <article class="resource-item">
+            <h3>Lecture Slides – Week 2</h3>
+            <p>Slides covering the material discussed during Week 2 classes.</p>
+            <a href="details.html?id=2">View Resource & Discussion</a>
+            <!-- End of article. -->
+  </article>
             <!-- Example Resource 2: -->
             <!-- TODO: Create a second 'article' for another resource. -->
+        <article class="resource-item">
                 <!-- TODO: Add a heading, paragraph, and an anchor tag linking to "resource-detail.html". -->
+     <h3>Chapter 2 Summary</h3>
+            <p>This resource contains summaries and key concepts covered in Chapter 2.</p>
+            <a href="details.html?id=3">View Resource & Discussion</a>
             <!-- End of article. -->
-
+</article>
         <!-- End of resource list section. -->
+    </section>
     <!-- End of main. -->
-
+  </main>
+  <script src="list.js" defer></script>
 </body>
 </html>
