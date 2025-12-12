@@ -388,32 +388,78 @@ function deleteStudent($db, $studentId) {
  *   - new_password: The new password to set
  */
 function changePassword($db, $data) {
+  
     // TODO: Validate required fields
     // Check if student_id, current_password, and new_password are provided
     // If any field is missing, return error response with 400 status
-    
+    if (!isset($data['student_id']) || 
+        !isset($data['current_password']) || 
+        !isset($data['new_password']) || 
+        empty($data['student_id']) || 
+        empty($data['current_password']) || 
+        empty($data['new_password']))
+    {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Missing required information'
+        ],400);
+        return;
+    }
     // TODO: Validate new password strength
     // Check minimum length (at least 8 characters)
     // If validation fails, return error response with 400 status
+    if (strlen($data['new_password']) < 8) {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'New password must be at least 8 characters long'
+        ],400);
+        return;
+    }
     
     // TODO: Retrieve current password hash from database
     // Prepare and execute SELECT query to get password
+    $stmt = $db->prepare("SELECT password FROM students WHERE student_id = ?");
+    $stmt -> execute([$data['student_id']]);
+    $row = $stmt-> fetch(PDO::FETCH_ASSOC);
     
     // TODO: Verify current password
     // Use password_verify() to check if current_password matches the hash
     // If verification fails, return error response with 401 status (Unauthorized)
+    if (!password_verify($data['current_password'], $row['password'])) {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Current password is incorrect'
+        ],401);
+        return;
+    }
     
     // TODO: Hash the new password
     // Use password_hash() with PASSWORD_DEFAULT
+    $newHashedPassword = password_hash($data['new_password'], PASSWORD_DEFAULT);
     
     // TODO: Update password in database
     // Prepare UPDATE query
-    
+    $stmt = $db->prepare("UPDATE students SET password = ? WHERE student_id = ?");
+   
     // TODO: Bind parameters and execute
+     $stmt->bindParam(1, $newHashedPassword);
+    $stmt->bindParam(2, $data['student_id']);
+    $stmt -> execute();
     
     // TODO: Check if update was successful
     // If yes, return success response
     // If no, return error response with 500 status
+    if($stmt -> rowCount() > 0){
+        sendResponse([
+            'status' => 'success',
+            'message' => 'Password changed successfully'
+        ]);
+    } else {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Failed to change password'
+        ],500);
+    }
 }
 
 
