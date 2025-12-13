@@ -97,8 +97,7 @@ function isValidPassword(password) {
  * - Call `displayMessage("Login successful!", "success")`.
  * - (Optional) Clear the email and password input fields.
  */
-// i add async to use await inside for real login process
-async function handleLogin(event) {
+ function handleLogin(event) {
   // ... your implementation here ...
   event.preventDefault();
 
@@ -118,26 +117,6 @@ async function handleLogin(event) {
     emailInput.value="";
     passInput.value="";
   
-  //real login process
-  try {
-    const res = await fetch("./api/index.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password: pass })
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-      displayMessage("Login successful!", "success");
-      // حطي صفحة البداية اللي تبونها بعد اللوقن
-      window.location.href = "../admin/manage_users.html"; 
-    } else {
-      displayMessage(data.message || "Login failed.", "error");
-    }
-  } catch (e) {
-    displayMessage("Server error. Try again.", "error");
-  }
 }
   
 }
