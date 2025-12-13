@@ -154,7 +154,8 @@ async function loadAndInitialize() {
   // ... your implementation here ...
     try {
         // 1. Fetch data from resources.json
-const response = await fetch("resources.json");
+const response = await fetch("./resources.json");
+
         const data = await response.json();
 
         // 2. Store JSON data in the global resources array
