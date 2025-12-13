@@ -55,7 +55,7 @@ async function loadResources() {
   // ... your implementation here ...
 try {
         // 1. Fetch resources.json
-const response = await fetch("resources.json");
+const response = await fetch("./resources.json");
 
         // 2. Parse JSON
         const resources = await response.json();
