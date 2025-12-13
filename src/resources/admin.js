@@ -18,10 +18,18 @@ let resources = [];
 // --- Element Selections ---
 // TODO: Select the resource form ('#resource-form').
 const resourceForm = document.querySelector("#resource-form");
-
-
 // TODO: Select the resources table body ('#resources-tbody').
-const resourcesTbody = document.querySelector("#resources-tbody");
+const resourcesTableBody = document.querySelector("#resources-tbody");
+const RESOURCE_URL = "./api/index.php?resource=resources";
+
+const searchInput = document.getElementById("Search-input");
+const filterSelect = document.getElementById("filter-select");
+const orderBtn = document.getElementById("order-btn");
+let sortAsc = true;
+let timer;
+const submit_btn = document.getElementById("add-resource");
+const cancel_btn = document.getElementById("cancel-edit-button");
+const formTitle = document.getElementById("form-title");
 
 // --- Functions ---
 
@@ -36,24 +44,35 @@ const resourcesTbody = document.querySelector("#resources-tbody");
  * - A "Delete" button with class "delete-btn" and `data-id="${id}"`.
  */
 function createResourceRow(resource) {
-  const { id, title, description } = resource;
+  // ... your implementation here ...
+  const row = document.createElement("tr");
+  const title = document.createElement("td");
+  title.textContent = resource.title;
+  row.appendChild(title);
 
-  // Create <tr>
-  const tr = document.createElement("tr");
+  const description = document.createElement("td");
+  description.textContent = resource.description;
+  row.appendChild(description);
 
-  tr.innerHTML = `
-    <td>${title}</td>
-    <td>${description}</td>
-    <td>
-      <button class="edit-btn" data-id="${id}">Edit</button>
-      <button class="delete-btn" data-id="${id}">Delete</button>
-    </td>
-  `;
+  const buttonstd = document.createElement("td");
+  buttonstd.classList.add("action-td");
 
-  return tr;
+  const b1 = document.createElement("button");
+  b1.textContent = "Edit";
+  b1.classList.add("edit-btn");
+  b1.dataset.id = resource.id;
+  buttonstd.appendChild(b1);
+
+  const b2 = document.createElement("button");
+  b2.textContent = "Delete";
+  b2.classList.add("delete-btn");
+  b2.dataset.id = resource.id;
+  buttonstd.appendChild(b2);
+
+  row.appendChild(buttonstd);
+  return row;
 }
 
-  
 /**
  * TODO: Implement the renderTable function.
  * It should:
@@ -64,18 +83,13 @@ function createResourceRow(resource) {
  */
 function renderTable() {
   // ... your implementation here ...
-    // 1. Clear the table body
-    resourcesTbody.innerHTML = "";
-
-    // 2. Loop through the resources array
-    resources.forEach(resource => {
-        // 3. Create a <tr> using createResourceRow()
-        const row = createResourceRow(resource);
-
-        // Append the row to the tbody
-        resourcesTbody.appendChild(row);
-    });
+  resourcesTableBody.innerHTML = "";
+  resources.forEach(res => {
+    const r = createResourceRow(res);
+    resourcesTableBody.appendChild(r);
+  });
 }
+
 /**
  * TODO: Implement the handleAddResource function.
  * This is the event handler for the form's 'submit' event.
@@ -89,30 +103,61 @@ function renderTable() {
  */
 function handleAddResource(event) {
   // ... your implementation here ...
-    // 1. Prevent form submission
-    event.preventDefault();
+  event.preventDefault();
+  const title = document.getElementById("resource-title").value;
+  const description = document.getElementById("resource-description").value;
+  const link = document.getElementById("resource-link").value;
+  const edit = Number(resourceForm.dataset.editId);
+  if (!edit) {
+    let newResource = { id: "", title, description, link };
+    fetch(RESOURCE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newResource)
+    })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          newResource.id = result.id
+          resources.push(newResource);
+          renderTable();
+          resourceForm.reset();
+          resourcesTableBody.scrollIntoView({ behavior: "smooth" });
+        }
+        else console.error("Insertion failed:", result.message);
+      });
+  }
+  else {
+    const resource = resources.find(r => Number(r.id) === edit);
+    resource.title = title;
+    resource.description = description;
+    resource.link = link;
 
-    // 2. Get input values
-    const title = document.getElementById("resource-title").value;
-    const description = document.getElementById("resource-description").value;
-    const link = document.getElementById("resource-link").value;
+    fetch(`${RESOURCE_URL}&id=${edit}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: edit,
+        title,
+        description,
+        link
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) console.error("Update failed:", data.message);
+        else {
+          renderTable();
+          restEdit();
+          resourceForm.reset();
+        }
+      });
 
-    // 3. Create new resource object with unique ID
-  const newResource = {
-    id: `res_${Date.now()}`,
-    title: title,
-    description: description,
-    link: link
-  };
-    // 4. Add to global resources array
-    resources.push(newResource);
-
-    // 5. Refresh the table
-    renderTable();
-
-    // 6. Reset the form
-    resourceForm.reset();
+    delete resourceForm.dataset.editId;
+    resourceForm.querySelector("button[type='submit']").textContent = "Add Resource";
+  }
 }
+
 
 /**
  * TODO: Implement the handleTableClick function.
@@ -126,20 +171,73 @@ function handleAddResource(event) {
  */
 function handleTableClick(event) {
   // ... your implementation here ...
-    // 1. Check if the clicked element is a delete button
-    if (event.target.classList.contains("delete-btn")) {
+  if (event.target.classList.contains("delete-btn")) {
+    const data = Number(event.target.dataset.id);
 
-        // 2. Get the ID from data-id attribute
-        const id = event.target.getAttribute("data-id");
+    fetch(`${RESOURCE_URL}&id=${data}`, {
+      method: "DELETE"
+    })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          resources = resources.filter(d => Number(d.id) !== data);
+          renderTable();
+        }
+        else { console.error("Delete failed:", result.message); }
+      })
 
-        // 3. Remove the resource with that ID
-        resources = resources.filter(resource => resource.id !== id);
+  }
 
-        // 4. Refresh the table
-        renderTable();
-    }
+  else if (event.target.classList.contains("edit-btn")) {
+    const id = Number(event.target.dataset.id);
+    const resource = resources.find(d => Number(d.id) === id);
+    if (!resource) return;
+
+    document.getElementById("resource-title").value = resource.title;
+    document.getElementById("resource-description").value = resource.description;
+    document.getElementById("resource-link").value = resource.link;
+
+    resourceForm.dataset.editId = id;
+    resourceForm.querySelector("button[type='submit']").textContent = "Update Resource";
+    cancel_btn.style.display = "inline-block";
+    formTitle.textContent = "Update Resource";
+    resourceForm.scrollIntoView({ behavior: "smooth" });
+  }
 }
 
+
+function loadFilteredResources() {
+  const search = searchInput.value.trim();
+  const sort = filterSelect.value;
+  const order = sortAsc ? "asc" : "desc";
+
+  const url = `${RESOURCE_URL}&search=${encodeURIComponent(search)}&sort=${sort}&order=${order}`;
+
+  fetch(url).then(response => response.json()).then(result => {
+    resources = result.data;
+    renderTable();
+  }).catch(error => console.error("Error fetching filtered resources:", error));
+}
+searchInput.addEventListener("input", e => {
+  clearTimeout(timer);
+  timer = setTimeout(() => loadFilteredResources(), 300);
+});
+filterSelect.addEventListener("change", loadFilteredResources);
+orderBtn.addEventListener("click", () => {
+  sortAsc = !sortAsc;
+  orderBtn.textContent = sortAsc ? "Asc" : "Desc";
+  loadFilteredResources();
+});
+
+
+cancel_btn.addEventListener("click", restEdit);
+function restEdit() {
+  resourceForm.reset();
+  delete resourceForm.dataset.editId;
+  submit_btn.textContent = "Add Resource";
+  cancel_btn.style.display = "none";
+  formTitle.textContent = "Add a New Resource";
+}
 /**
  * TODO: Implement the loadAndInitialize function.
  * This function needs to be 'async'.
@@ -152,26 +250,12 @@ function handleTableClick(event) {
  */
 async function loadAndInitialize() {
   // ... your implementation here ...
-    try {
-        // 1. Fetch data from resources.json
-const response = await fetch("api/resources.json");
-        const data = await response.json();
-
-        // 2. Store JSON data in the global resources array
-        resources = data;
-
-        // 3. Render the table for the first time
-        renderTable();
-
-        // 4. Add the submit event listener to the form
-        resourceForm.addEventListener("submit", handleAddResource);
-
-        // 5. Add the click event listener for delete/edit buttons
-        resourcesTbody.addEventListener("click", handleTableClick);
-
-    } catch (error) {
-        console.error("Error loading resources:", error);
-    }
+  const response = await fetch(RESOURCE_URL);
+  const result = await response.json();
+  resources = result.data || [];
+  renderTable();
+  resourceForm.addEventListener("submit", handleAddResource);
+  resourcesTableBody.addEventListener("click", handleTableClick);
 }
 
 // --- Initial Page Load ---
