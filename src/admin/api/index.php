@@ -144,7 +144,8 @@ function getStudents($db) {
  */
 function getStudentById($db, $studentId) {
     // TODO: Prepare SQL query to select student by student_id
-    $stmt = $db->prepare("SELECT * FROM students WHERE student_id = ?");
+    $stmt = $db->prepare("SELECT id, student_id, name, email, created_at FROM students WHERE student_id = ?");
+
     // TODO: Bind the student_id parameter
     $stmt->bindParam(1, $studentId);
 
@@ -319,7 +320,23 @@ function updateStudent($db, $data) {
         'message' => 'No fields provided to update'
     ], 400);
     return;
-}
+    }
+            $query .= " WHERE student_id = ? ";
+            $params[] = $data['student_id'];
+            $stmt = $db->prepare($query);
+            $stmt->execute($params);
+            if ($stmt->rowCount() > 0) {
+        sendResponse([
+            'status' => 'success',
+            'message' => 'Student updated successfully'
+        ]);
+    } else {
+        sendResponse([
+            'status' => 'error',
+            'message' => 'Failed to update student'
+        ], 500);
+    }
+        
 }
 /**
  * Function: Delete a student
@@ -421,7 +438,13 @@ function changePassword($db, $data) {
     $stmt = $db->prepare("SELECT password FROM students WHERE student_id = ?");
     $stmt -> execute([$data['student_id']]);
     $row = $stmt-> fetch(PDO::FETCH_ASSOC);
-    
+
+    if (!$row) {
+    sendResponse([
+        'status' => 'error',
+        'message' => 'Student not found'
+    ], 404);
+}
     // TODO: Verify current password
     // Use password_verify() to check if current_password matches the hash
     // If verification fails, return error response with 401 status (Unauthorized)
@@ -474,34 +497,61 @@ try {
         // TODO: Check if student_id is provided in query parameters
         // If yes, call getStudentById()
         // If no, call getStudents() to get all students (with optional search/sort)
+        if ($studentId) {
+            getStudentById($db, $studentId);
+        } else {
+            getStudents($db);
+        }
         
     } elseif ($method === 'POST') {
         // TODO: Check if this is a change password request
         // Look for action=change_password in query parameters
         // If yes, call changePassword()
         // If no, call createStudent()
+        if ($action === 'change_password') {
+            changePassword($db, $data);
+        } else {
+            createStudent($db, $data);
+        }
         
     } elseif ($method === 'PUT') {
         // TODO: Call updateStudent()
+        updateStudent($db, $data);
         
     } elseif ($method === 'DELETE') {
         // TODO: Get student_id from query parameter or request body
         // Call deleteStudent()
+        $studentIdToDelete = $studentId ?? ($data['student_id'] ?? null);
+        deleteStudent($db, $studentIdToDelete);
         
     } else {
         // TODO: Return error for unsupported methods
         // Set HTTP status to 405 (Method Not Allowed)
         // Return JSON error message
+        http_response_code(405);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Method Not Allowed'
+        ]);
+        exit;
     }
     
 } catch (PDOException $e) {
     // TODO: Handle database errors
     // Log the error message (optional)
     // Return generic error response with 500 status
-    
+    error_log($e->getMessage());
+    sendResponse([
+        'status' => 'error',
+        'message' => 'Database error occurred'
+    ], 500);
 } catch (Exception $e) {
     // TODO: Handle general errors
     // Return error response with 500 status
+    sendResponse([
+        'status' => 'error',
+        'message' => 'An unexpected error occurred'
+    ], 500);
 }
 
 
@@ -517,10 +567,11 @@ try {
  */
 function sendResponse($data, $statusCode = 200) {
     // TODO: Set HTTP response code
-    
+    http_response_code($statusCode);
     // TODO: Echo JSON encoded data
-    
+    echo json_encode($data);
     // TODO: Exit to prevent further execution
+    exit();
 }
 
 
@@ -533,6 +584,11 @@ function sendResponse($data, $statusCode = 200) {
 function validateEmail($email) {
     // TODO: Use filter_var with FILTER_VALIDATE_EMAIL
     // Return true if valid, false otherwise
+      if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -547,6 +603,10 @@ function sanitizeInput($data) {
     // TODO: Strip HTML tags using strip_tags()
     // TODO: Convert special characters using htmlspecialchars()
     // Return sanitized data
+    $data = trim($data);
+    $data = strip_tags($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
 
 ?>
