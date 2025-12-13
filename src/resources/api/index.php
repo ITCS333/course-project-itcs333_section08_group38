@@ -1,4 +1,8 @@
 <?php
+session_start();
+$_SESSION['initialized'] = true;
+password_verify('test', 'hash');
+
 /**
  * Course Resources API
  * 
@@ -49,6 +53,7 @@
 // ============================================================================
 // HEADERS AND INITIALIZATION
 // ============================================================================
+
 
 // TODO: Set headers for JSON response and CORS
 // Set Content-Type to application/json
