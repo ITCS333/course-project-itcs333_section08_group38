@@ -163,8 +163,8 @@ async function initializePage() {
   try {
     // 3. Fetch both JSON files in parallel
 const [resourcesRes, commentsRes] = await Promise.all([
-  fetch("api/resources.json"),
-  fetch("api/comments.json"),
+fetch("resources.json"),
+fetch("comments.json"),
 ]);
 
     // 4. Parse JSON
