@@ -113,12 +113,29 @@ async function handleLogin(event) {
     displayMessage("Password must be at least 8 characters.", "error");
     return;
   }
-  else{
-    displayMessage("Login successful!", "success")
-    emailInput.value="";
-    passInput.value="";
-  
-}
+  else {
+    try {
+      const response = await fetch("api/index.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password: pass })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        displayMessage("Login successful!", "success");
+     
+        window.location.href = "../discussion/baord.html"; 
+      } else {
+        displayMessage(result.message || "Login failed.", "error");
+      }
+    } catch (err) {
+      displayMessage("Server error. Try again.", "error");
+    }
+  }
+
   
 }
 
