@@ -1,6 +1,9 @@
 <?php
 
 session_start();
+//for real login process
+$_SESSION['logged_in'] = true;
+echo json_encode(['success' => true, 'message' => 'Login successful']);
 
 
 header('Content-Type: application/json');
