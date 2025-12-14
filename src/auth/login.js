@@ -46,7 +46,7 @@ const messageContainer=document.getElementById("message-container");
 function displayMessage(message, type) {
   // ... your implementation here ...
   messageContainer.textContent=message;
-  messageContainer.classList=type;
+  messageContainer.className=type;
 }
 
 /**
@@ -97,12 +97,13 @@ function isValidPassword(password) {
  * - Call `displayMessage("Login successful!", "success")`.
  * - (Optional) Clear the email and password input fields.
  */
- function handleLogin(event) {
+// i add async to use await inside for real login process
+async function handleLogin(event) {
   // ... your implementation here ...
   event.preventDefault();
 
-  email=emailInput.value.trim();
-  pass=passInput.value.trim();
+  const email=emailInput.value.trim();
+  const pass=passInput.value.trim();
 
   if(!isValidEmail(email)){
     displayMessage("Invalid email format.", "error")
