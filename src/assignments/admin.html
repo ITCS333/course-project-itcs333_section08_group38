@@ -22,10 +22,15 @@
 
     <script src="admin.js" defer></script>
     
-    
+ <script>
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await fetch("../auth/api/logout.php", { method: "POST", credentials: "include" });
+      window.location.href = "../auth/login.html";
+    });
+    </script>
 </head>
-
 <body>
+    <button id="logoutBtn">Logout</button>
      
 
     <!-- TODO: Create a 'header' with a main heading ('h1') "Manage Assignments". -->

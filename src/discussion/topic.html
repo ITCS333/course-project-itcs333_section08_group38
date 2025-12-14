@@ -18,8 +18,15 @@
     <link rel="stylesheet" href="../common/styles.css">
 
     <script src="topic.js" defer></script>
+<script>
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await fetch("../auth/api/logout.php", { method: "POST", credentials: "include" });
+      window.location.href = "../auth/login.html";
+    });
+    </script>
 </head>
 <body>
+    <button id="logoutBtn">Logout</button>
     <!-- TODO: Create a 'header' with a main heading ('h1'). Use a dummy title like "Question about CSS Flexbox". -->
          <header>
          <h1 id="topic-subject">Question about CSS Flexbox</h1>
