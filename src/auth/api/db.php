@@ -3,9 +3,9 @@
 function getDBConnection(): PDO
 {
     $host = "localhost";
-    $db   = "web_db";
-    $user = "root";
-    $pass = "";
+    $db   = "course";
+    $user = "admin";
+    $pass = "password123";
 
     try {
         $pdo = new PDO(
