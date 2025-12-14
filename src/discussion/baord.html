@@ -19,16 +19,16 @@
     <!-- TODO: Link to your CSS framework or stylesheet. -->
      <link rel="stylesheet" href="../common/styles.css">
      <script src="board.js" defer></script>
- <script>
+ 
+</head>
+<body>
+    <button id="logoutBtn">Logout</button>
+    <script>
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await fetch("../auth/api/logout.php", { method: "POST", credentials: "include" });
       window.location.href = "../auth/login.html";
     });
     </script>
-</head>
-<body>
-    <button id="logoutBtn">Logout</button>
-    
     <!-- TODO: Create a 'header' with a main heading ('h1') "General Discussion Board". -->
      <h1>General Discussion Board</h1>
 
