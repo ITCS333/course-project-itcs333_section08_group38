@@ -21,18 +21,18 @@
     <link rel="stylesheet" href="../common/styles.css">
 
     <script src="admin.js" defer></script>
-    
+      <script>
+      document.addEventListener("DOMContentLoaded", requireAdmin);
+    </script>
+    <script type="module">
+      import { requireAdmin } from "../common/guard.js";
+      document.addEventListener("DOMContentLoaded", requireAdmin);
+    </script>
+
 
 </head>
 <body>
-    <button id="logoutBtn">Logout</button>
-      <script>
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      await fetch("../auth/api/logout.php", { method: "POST", credentials: "include" });
-      window.location.href = "../auth/login.html";
-    });
-    </script>
-
+  
     <!-- TODO: Create a 'header' with a main heading ('h1') "Manage Assignments". -->
      <header>
         <h1>Manage Assignments</h1>

@@ -102,14 +102,14 @@ async function handleLogin(event) {
   // ... your implementation here ...
   event.preventDefault();
 
-  const email=emailInput.value.trim();
-  const pass=passInput.value.trim();
+  const email =emailInput.value.trim();
+  const password =passInput.value;
 
   if(!isValidEmail(email)){
     displayMessage("Invalid email format.", "error")
     return
   }
-  else if (!isValidPassword(pass)){
+  else if (!isValidPassword(password)){
     displayMessage("Password must be at least 8 characters.", "error");
     return;
   }
@@ -119,23 +119,25 @@ async function handleLogin(event) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ email, password: pass })
+        body: JSON.stringify({ email, password })
       });
 
       const result = await response.json();
-
-      if (result.success) {
-        displayMessage("Login successful!", "success");
-     
-        window.location.href = "../discussion/baord.html"; 
-      } else {
-        displayMessage(result.message || "Login failed.", "error");
+    
+      if(!result.success)
+      {
+        displayMessage(result.message , "error");
+        return;
       }
+    
+        displayMessage("Login successful!", "success");
+
+        window.location.href = "../../index.html"; 
+      
     } catch (err) {
       displayMessage("Server error. Try again.", "error");
     }
   }
-
   
 }
 

@@ -9,7 +9,7 @@
  * Table: students
  * Columns:
  *   - id (INT, PRIMARY KEY, AUTO_INCREMENT)
- *   - student_id (VARCHAR(50), UNIQUE) - The student's university ID
+ *   - student_id (VARCHAR(50), UNIQUE) - The student"s university ID
  *   - name (VARCHAR(100))
  *   - email (VARCHAR(100), UNIQUE)
  *   - password (VARCHAR(255)) - Hashed password
@@ -30,33 +30,34 @@
 // Allow specific HTTP methods (GET, POST, PUT, DELETE, OPTIONS)
 // Allow specific headers (Content-Type, Authorization)
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Credentials: true")
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 
 // TODO: Handle preflight OPTIONS request
 // If the request method is OPTIONS, return 200 status and exit
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     http_response_code(200);
-    exit();
+    exit;
 }
 
 
 // TODO: Include the database connection class
 // Assume the Database class has a method getConnection() that returns a PDO instance
 // TODO: Get the PDO database connection
-require_once 'Database.php';
-$database = new Database();
-$db = $database->getConnection();
+require_once __DIR__ . "/Database.php";
+
+$db = getDBConnection();
 
 
 // TODO: Get the HTTP request method
-// Use $_SERVER['REQUEST_METHOD']
-$method = $_SERVER['REQUEST_METHOD'];
+// Use $_SERVER["REQUEST_METHOD"]
+$method = $_SERVER["REQUEST_METHOD"];
 
 // TODO: Get the request body for POST and PUT requests
-// Use file_get_contents('php://input') to get raw POST data
+// Use file_get_contents("php://input") to get raw POST data
 // Decode JSON data using json_decode()
                  
 $rawData = file_get_contents("php://input");
@@ -65,11 +66,11 @@ $data = json_decode($rawData, true)??[];
 
 
 // TODO: Parse query parameters for filtering and searching
-$search = $_GET['search'] ?? null;
-$sort = $_GET['sort'] ?? null;
-$order = $_GET['order'] ?? null;
-$studentId = $_GET['student_id'] ?? null;
-$action = $_GET['action'] ?? null;
+$search = $_GET["search"] ?? null;
+$sort = $_GET["sort"] ?? null;
+$order = $_GET["order"] ?? null;
+$studentId = $_GET["student_id"] ?? null;
+$action = $_GET["action"] ?? null;
 
 
 /**
@@ -86,8 +87,8 @@ function getStudents($db) {
     // TODO: Check if search parameter exists
     // If yes, prepare SQL query with WHERE clause using LIKE
     // Search should work on name, student_id, and email fields
-    if(isset($_GET['search'])){
-        $search=$_GET['search'];
+    if(isset($_GET["search"])){
+        $search=$_GET["search"];
         $like="%".$search."%";
         $query.=" WHERE name LIKE ? OR student_id LIKE ? OR email LIKE ?";
     } 
@@ -95,15 +96,15 @@ function getStudents($db) {
     // If yes, add ORDER BY clause to the query
     // Validate sort field to prevent SQL injection (only allow: name, student_id, email)
     // Validate order to prevent SQL injection (only allow: asc, desc)
-    if(isset($_GET['sort'])){
-        $sort=$_GET['sort'];
-        $allowedSortFields = ['name', 'student_id', 'email'];
-        $allowedOrder = ['asc', 'desc'];
+    if(isset($_GET["sort"])){
+        $sort=$_GET["sort"];
+        $allowedSortFields = ["name", "student_id", "email"];
+        $allowedOrder = ["asc", "desc"];
         if(in_array($sort,$allowedSortFields)){
             $query.=" ORDER BY ".$sort;
             
-            if(isset($_GET['order']) ){
-                $order=$_GET['order'];
+            if(isset($_GET["order"]) ){
+                $order=$_GET["order"];
                 if(in_array($order,$allowedOrder)){ 
                 $query.=" ".$order;}
             }
@@ -114,7 +115,7 @@ function getStudents($db) {
     $stmt = $db->prepare($query);
 
     // TODO: Bind parameters if using search
-    if(isset($_GET['search'])){
+    if(isset($_GET["search"])){
         $stmt->bindParam(1,$like);
         $stmt->bindParam(2,$like);
         $stmt->bindParam(3,$like);
@@ -128,8 +129,8 @@ function getStudents($db) {
     
     // TODO: Return JSON response with success status and data
     sendResponse([
-        'status' => 'success',
-        'data' => $students
+        "status" => "success",
+        "data" => $students
     ]);
 }
  
@@ -140,7 +141,7 @@ function getStudents($db) {
  * Method: GET
  * 
  * Query Parameters:
- *   - student_id: The student's university ID
+ *   - student_id: The student"s university ID
  */
 function getStudentById($db, $studentId) {
     // TODO: Prepare SQL query to select student by student_id
@@ -160,13 +161,13 @@ function getStudentById($db, $studentId) {
     // If no, return error response with 404 status
     if($student){
         sendResponse([
-            'status' => 'success',
-            'data' => $student
+            "status" => "success",
+            "data" => $student
         ]);
     } else {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Student not found'
+            "status" => "error",
+            "message" => "Student not found"
         ], 404);
     }
 }
@@ -177,39 +178,39 @@ function getStudentById($db, $studentId) {
  * Method: POST
  * 
  * Required JSON Body:
- *   - student_id: The student's university ID (must be unique)
- *   - name: Student's full name
- *   - email: Student's email (must be unique)
+ *   - student_id: The student"s university ID (must be unique)
+ *   - name: Student"s full name
+ *   - email: Student"s email (must be unique)
  *   - password: Default password (will be hashed)
  */
 function createStudent($db, $data) {
     // TODO: Validate required fields
     // Check if student_id, name, email, and password are provided
     // If any field is missing, return error response with 400 status
-    if (!isset($data['student_id']) || 
-        !isset($data['name']) || 
-        !isset($data['email']) || 
-        !isset($data['password']) || empty($data['student_id']) || 
-        empty($data['name']) || empty($data['email']) || 
-        empty($data['password']))
+    if (!isset($data["student_id"]) || 
+        !isset($data["name"]) || 
+        !isset($data["email"]) || 
+        !isset($data["password"]) || empty($data["student_id"]) || 
+        empty($data["name"]) || empty($data["email"]) || 
+        empty($data["password"]))
     {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Missing required information'
+            "status" => "error",
+            "message" => "Missing required information"
         ],400);
     }
     
     // TODO: Sanitize input data
     // Trim whitespace from all fields
     // Validate email format using filter_var()
-    $student_id = trim($data['student_id']);
-    $name = trim($data['name']);
-    $email = trim($data['email']);
-    $password = trim($data['password']);
+    $student_id = trim($data["student_id"]);
+    $name = trim($data["name"]);
+    $email = trim($data["email"]);
+    $password = trim($data["password"]);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Invalid email format'
+            "status" => "error",
+            "message" => "Invalid email format"
         ],400);
     }
     
@@ -222,8 +223,8 @@ function createStudent($db, $data) {
     if($stmt-> fetch(PDO::FETCH_ASSOC))
     {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Student ID or Email already exists'
+            "status" => "error",
+            "message" => "Student ID or Email already exists"
         ],409);
     }
     
@@ -249,13 +250,13 @@ function createStudent($db, $data) {
     
     if($check){
         sendResponse([
-            'status' => 'success',
-            'message' => 'Student created successfully'
+            "status" => "success",
+            "message" => "Student created successfully"
         ],201);
     } else {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Failed to create student'
+            "status" => "error",
+            "message" => "Failed to create student"
         ],500);
     }
 
@@ -268,17 +269,17 @@ function createStudent($db, $data) {
  * Method: PUT
  * 
  * Required JSON Body:
- *   - student_id: The student's university ID (to identify which student to update)
+ *   - student_id: The student"s university ID (to identify which student to update)
  *   - name: Updated student name (optional)
  *   - email: Updated student email (optional)
  */
 function updateStudent($db, $data) {
     // TODO: Validate that student_id is provided
     // If not, return error response with 400 status
-    if (!isset($data['student_id'])|| empty($data['student_id'])) {
+    if (!isset($data["student_id"])|| empty($data["student_id"])) {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Missing student_id'
+            "status" => "error",
+            "message" => "Missing student_id"
         ],400);
         return;
     }
@@ -287,25 +288,25 @@ function updateStudent($db, $data) {
     // Prepare and execute a SELECT query to find the student
     // If not found, return error response with 404 status
     $stmt = $db->prepare("SELECT * FROM students WHERE student_id = ?");
-    $stmt -> execute([$data['student_id']]);
+    $stmt -> execute([$data["student_id"]]);
     if(!$stmt-> fetch(PDO::FETCH_ASSOC)){
         sendResponse([
-            'status' => 'error',
-            'message' => 'Student not found'
+            "status" => "error",
+            "message" => "Student not found"
         ],404);
         return;
     }
     // TODO: Build UPDATE query dynamically based on provided fields
     // Only update fields that are provided in the request
 
-   $allowedFields = ['name', 'email'];
+   $allowedFields = ["name", "email"];
         $query = "UPDATE students SET ";
         $params = [];
 
         foreach ($allowedFields as $field) {
             if (isset($data[$field])) {
                 $value = trim((string)$data[$field]);
-                if ($value !== '') {
+                if ($value !== "") {
                     if (count($params) > 0) {
                         $query .= ", ";
                     }
@@ -316,24 +317,24 @@ function updateStudent($db, $data) {
         }
         if (count($params) === 0) {
     sendResponse([
-        'status' => 'error',
-        'message' => 'No fields provided to update'
+        "status" => "error",
+        "message" => "No fields provided to update"
     ], 400);
     return;
     }
             $query .= " WHERE student_id = ? ";
-            $params[] = $data['student_id'];
+            $params[] = $data["student_id"];
             $stmt = $db->prepare($query);
             $stmt->execute($params);
             if ($stmt->rowCount() > 0) {
         sendResponse([
-            'status' => 'success',
-            'message' => 'Student updated successfully'
+            "status" => "success",
+            "message" => "Student updated successfully"
         ]);
     } else {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Failed to update student'
+            "status" => "error",
+            "message" => "Failed to update student"
         ], 500);
     }
         
@@ -343,15 +344,15 @@ function updateStudent($db, $data) {
  * Method: DELETE
  * 
  * Query Parameters or JSON Body:
- *   - student_id: The student's university ID
+ *   - student_id: The student"s university ID
  */
 function deleteStudent($db, $studentId) {
     // TODO: Validate that student_id is provided
     // If not, return error response with 400 status
-    if (!$studentId || trim($studentId) === '') {
+    if (!$studentId || trim($studentId) === "") {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Missing student_id'
+            "status" => "error",
+            "message" => "Missing student_id"
         ],400);
         return;
     }
@@ -362,8 +363,8 @@ function deleteStudent($db, $studentId) {
     $stmt -> execute([$studentId]);
     if(!$stmt-> fetch(PDO::FETCH_ASSOC)){
         sendResponse([
-            'status' => 'error',
-            'message' => 'Student not found'
+            "status" => "error",
+            "message" => "Student not found"
         ],404);
         return;
     }
@@ -382,13 +383,13 @@ function deleteStudent($db, $studentId) {
     // If no, return error response with 500 status
     if($stmt -> rowCount() > 0){
         sendResponse([
-            'status' => 'success',
-            'message' => 'Student deleted successfully'
+            "status" => "success",
+            "message" => "Student deleted successfully"
         ]);
     } else {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Failed to delete student'
+            "status" => "error",
+            "message" => "Failed to delete student"
         ],500);
     }
 
@@ -400,8 +401,8 @@ function deleteStudent($db, $studentId) {
  * Method: POST with action=change_password
  * 
  * Required JSON Body:
- *   - student_id: The student's university ID (identifies whose password to change)
- *   - current_password: The student's current password
+ *   - student_id: The student"s university ID (identifies whose password to change)
+ *   - current_password: The student"s current password
  *   - new_password: The new password to set
  */
 function changePassword($db, $data) {
@@ -409,26 +410,26 @@ function changePassword($db, $data) {
     // TODO: Validate required fields
     // Check if student_id, current_password, and new_password are provided
     // If any field is missing, return error response with 400 status
-    if (!isset($data['student_id']) || 
-        !isset($data['current_password']) || 
-        !isset($data['new_password']) || 
-        empty($data['student_id']) || 
-        empty($data['current_password']) || 
-        empty($data['new_password']))
+    if (!isset($data["student_id"]) || 
+        !isset($data["current_password"]) || 
+        !isset($data["new_password"]) || 
+        empty($data["student_id"]) || 
+        empty($data["current_password"]) || 
+        empty($data["new_password"]))
     {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Missing required information'
+            "status" => "error",
+            "message" => "Missing required information"
         ],400);
         return;
     }
     // TODO: Validate new password strength
     // Check minimum length (at least 8 characters)
     // If validation fails, return error response with 400 status
-    if (strlen($data['new_password']) < 8) {
+    if (strlen($data["new_password"]) < 8) {
         sendResponse([
-            'status' => 'error',
-            'message' => 'New password must be at least 8 characters long'
+            "status" => "error",
+            "message" => "New password must be at least 8 characters long"
         ],400);
         return;
     }
@@ -436,29 +437,29 @@ function changePassword($db, $data) {
     // TODO: Retrieve current password hash from database
     // Prepare and execute SELECT query to get password
     $stmt = $db->prepare("SELECT password FROM students WHERE student_id = ?");
-    $stmt -> execute([$data['student_id']]);
+    $stmt -> execute([$data["student_id"]]);
     $row = $stmt-> fetch(PDO::FETCH_ASSOC);
 
     if (!$row) {
     sendResponse([
-        'status' => 'error',
-        'message' => 'Student not found'
+        "status" => "error",
+        "message" => "Student not found"
     ], 404);
 }
     // TODO: Verify current password
     // Use password_verify() to check if current_password matches the hash
     // If verification fails, return error response with 401 status (Unauthorized)
-    if (!password_verify($data['current_password'], $row['password'])) {
+    if (!password_verify($data["current_password"], $row["password"])) {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Current password is incorrect'
+            "status" => "error",
+            "message" => "Current password is incorrect"
         ],401);
         return;
     }
     
     // TODO: Hash the new password
     // Use password_hash() with PASSWORD_DEFAULT
-    $newHashedPassword = password_hash($data['new_password'], PASSWORD_DEFAULT);
+    $newHashedPassword = password_hash($data["new_password"], PASSWORD_DEFAULT);
     
     // TODO: Update password in database
     // Prepare UPDATE query
@@ -466,7 +467,7 @@ function changePassword($db, $data) {
    
     // TODO: Bind parameters and execute
      $stmt->bindParam(1, $newHashedPassword);
-    $stmt->bindParam(2, $data['student_id']);
+    $stmt->bindParam(2, $data["student_id"]);
     $stmt -> execute();
     
     // TODO: Check if update was successful
@@ -474,13 +475,13 @@ function changePassword($db, $data) {
     // If no, return error response with 500 status
     if($stmt -> rowCount() > 0){
         sendResponse([
-            'status' => 'success',
-            'message' => 'Password changed successfully'
+            "status" => "success",
+            "message" => "Password changed successfully"
         ]);
     } else {
         sendResponse([
-            'status' => 'error',
-            'message' => 'Failed to change password'
+            "status" => "error",
+            "message" => "Failed to change password"
         ],500);
     }
 }
@@ -493,7 +494,7 @@ function changePassword($db, $data) {
 try {
     // TODO: Route the request based on HTTP method
     
-    if ($method === 'GET') {
+    if ($method === "GET") {
         // TODO: Check if student_id is provided in query parameters
         // If yes, call getStudentById()
         // If no, call getStudents() to get all students (with optional search/sort)
@@ -503,25 +504,25 @@ try {
             getStudents($db);
         }
         
-    } elseif ($method === 'POST') {
+    } elseif ($method === "POST") {
         // TODO: Check if this is a change password request
         // Look for action=change_password in query parameters
         // If yes, call changePassword()
         // If no, call createStudent()
-        if ($action === 'change_password') {
+        if ($action === "change_password") {
             changePassword($db, $data);
         } else {
             createStudent($db, $data);
         }
         
-    } elseif ($method === 'PUT') {
+    } elseif ($method === "PUT") {
         // TODO: Call updateStudent()
         updateStudent($db, $data);
         
-    } elseif ($method === 'DELETE') {
+    } elseif ($method === "DELETE") {
         // TODO: Get student_id from query parameter or request body
         // Call deleteStudent()
-        $studentIdToDelete = $studentId ?? ($data['student_id'] ?? null);
+        $studentIdToDelete = $studentId ?? ($data["student_id"] ?? null);
         deleteStudent($db, $studentIdToDelete);
         
     } else {
@@ -530,8 +531,8 @@ try {
         // Return JSON error message
         http_response_code(405);
         echo json_encode([
-            'status' => 'error',
-            'message' => 'Method Not Allowed'
+            "status" => "error",
+            "message" => "Method Not Allowed"
         ]);
         exit;
     }
@@ -542,15 +543,15 @@ try {
     // Return generic error response with 500 status
     error_log($e->getMessage());
     sendResponse([
-        'status' => 'error',
-        'message' => 'Database error occurred'
+        "status" => "error",
+        "message" => "Database error occurred"
     ], 500);
 } catch (Exception $e) {
     // TODO: Handle general errors
     // Return error response with 500 status
     sendResponse([
-        'status' => 'error',
-        'message' => 'An unexpected error occurred'
+        "status" => "error",
+        "message" => "An unexpected error occurred"
     ], 500);
 }
 
@@ -571,7 +572,7 @@ function sendResponse($data, $statusCode = 200) {
     // TODO: Echo JSON encoded data
     echo json_encode($data);
     // TODO: Exit to prevent further execution
-    exit();
+    exit;
 }
 
 

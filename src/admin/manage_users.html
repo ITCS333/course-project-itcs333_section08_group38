@@ -21,17 +21,14 @@
     <link rel="stylesheet" href="../common/styles.css">
 
     <script src="manage_users.js" defer></script>
+    <script type="module">
+      import { requireAdmin } from "../common/guard.js";
+      document.addEventListener("DOMContentLoaded", requireAdmin);
+    </script>
 
-   
 </head>
 <body>
-    <button id="logoutBtn">Logout</button>
-  <script>
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      await fetch("../auth/api/logout.php", { method: "POST", credentials: "include" });
-      window.location.href = "../auth/login.html";
-    });
-    </script>
+
     <!-- TODO: Create a 'header' element for the top of the page. -->
     <header>
         <!-- TODO: Inside the header, add a main heading (e.g., 'h1') with the text "Admin Portal". -->
@@ -234,4 +231,3 @@
 
 </body>
 </html>
-

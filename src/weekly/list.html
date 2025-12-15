@@ -16,16 +16,14 @@
     <!-- TODO: Link to your CSS framework or stylesheet. -->
     <link rel="stylesheet" href="../common/styles.css">
     <script src="list.js" defer></script>
-
+<script type="module">
+      import { requireLogin } from "../common/guard.js";
+      document.addEventListener("DOMContentLoaded", requireLogin);
+    </script>
 </head>
 <body>
-    <button id="logoutBtn">Logout</button>
-    <script>
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      await fetch("../auth/api/logout.php", { method: "POST", credentials: "include" });
-      window.location.href = "../auth/login.html";
-    });
-    </script>
+   
+    
     <!-- TODO: Create a 'header' with a main heading ('h1') "Weekly Course Breakdown". -->
     <header>
         <h1>Weekly Course Breakdown</h1>
