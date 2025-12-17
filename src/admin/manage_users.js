@@ -113,8 +113,9 @@ function renderTable(studentArray) {
  * 4. If validation passes, show an alert: "Password updated successfully!"
  * 5. Clear all three password input fields.
  */
-function handleChangePassword(event) {
-  // ... your implementation here ...
+const CHANGE_USER_PASSWORD_URL = "./api/index.php?action=change_user_password";
+
+async function handleChangePassword(event) {
   event.preventDefault();
 
   const currPassInput = document.getElementById("current-password");
@@ -133,10 +134,38 @@ function handleChangePassword(event) {
     alert("Password must be at least 8 characters.");
     return;
   }
-  alert("Password updated successfully!");
-  currPassInput.value = "";
-  newPassInput.value = "";
-  confirmPassInput.value = "";
+
+ 
+  const emailToChange = prompt("Enter the email to change password for:");
+  if (!emailToChange || !emailToChange.trim()) return;
+
+ 
+  try {
+    const res = await fetch(CHANGE_USER_PASSWORD_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        email: emailToChange.trim(),
+        current_password: currPassvalue,
+        new_password: newPassValue
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.status !== "success") {
+      alert(data.message || "Failed to change password");
+      return;
+    }
+
+    alert("Password updated successfully!");
+    currPassInput.value = "";
+    newPassInput.value = "";
+    confirmPassInput.value = "";
+  } catch (e) {
+    alert("Server error");
+  }
 }
 
 /**
@@ -186,11 +215,45 @@ function handleAddStudent(event) {
 
   students.push(newStudent);
 
-  renderTable(students);
+ 
+  
 
+  const defaultPassInput = document.getElementById("default-password");
+  const defaultPassValue = defaultPassInput ? defaultPassInput.value : "password123";
+
+  syncStudentToUsersTable(newStudent, defaultPassValue);
+
+ renderTable(students);
   studentNameInput.value = "";
   studentIdInput.value = "";
   studentEmailInput.value = "";
+}
+
+const CREATE_USER_STUDENT_URL = "api/index.php?action=create_user_student";
+
+async function syncStudentToUsersTable(student, defaultPassword = "password123") {
+  try {
+    const res = await fetch(CREATE_USER_STUDENT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        name: student.name,
+        email: student.email,
+        password: defaultPassword
+      
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.status !== "success") {
+      alert("DB insert failed:");
+      
+    }
+  } catch (e) {
+    console.warn("DB insert error");
+  }
 }
 
 /**
@@ -204,13 +267,86 @@ function handleAddStudent(event) {
  * - Call `renderTable(students)` to update the view.
  * 3. (Optional) Check for "edit-btn" and implement edit logic.
  */
-function handleTableClick(event) {
-  // ... your implementation here ...
+const UPDATE_USER_STUDENT_URL = "./api/index.php?action=update_user_student";
+
+async function handleTableClick(event) {
   const clickedEle = event.target;
 
+ 
   if (clickedEle.classList.contains("delete-btn")) {
-    students = students.filter(student => student.id !== clickedEle.dataset.id)
+    const clickedId = clickedEle.dataset.id;
+    const studentToDelete = students.find(s => s.id === clickedId);
+    if (!studentToDelete) return;
+
+    students = students.filter(s => s.id !== clickedId);
     renderTable(students);
+
+    try {
+      await fetch("./api/index.php?action=delete_user_student", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email: studentToDelete.email })
+      });
+    } catch (e) {}
+    return;
+  }
+
+  if (clickedEle.classList.contains("edit-btn")) {
+    const clickedId = clickedEle.dataset.id;
+
+    const student = students.find(s => s.id === clickedId);
+    if (!student) return;
+
+    const newName = prompt("Enter new name:", student.name);
+    if (newName === null) return;
+
+    const currentId = student.email.split("@")[0];
+    const newId = prompt("Enter new ID:", currentId);
+    if (newId === null) return;
+
+    const currentDomain = student.email.split("@")[1] || "";
+    const newEmail = prompt("Enter new email:", student.email);
+    if (newEmail === null) return;
+
+    const nameValue = newName.trim();
+    const idValue = newId.trim();
+    const emailValue = newEmail.trim();
+
+    if (!nameValue || !idValue || !emailValue) {
+      alert("Please fill out all required fields.");
+      return;
+    }
+
+    // 1) update UI (array)
+    const oldEmail = student.email;
+    student.name = nameValue;
+    student.id = idValue;       
+    student.email = emailValue;
+
+    renderTable(students);
+
+    // 2) update DB (users) by oldEmail -> new data
+    try {
+      const res = await fetch(UPDATE_USER_STUDENT_URL, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          old_email: oldEmail,
+          name: nameValue,
+          email: emailValue
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.status !== "success") {
+        alert(data.message || "Failed to update user");
+      }
+    } catch (e) {
+      alert("Server error");
+    }
   }
 }
 
@@ -267,7 +403,7 @@ function handleSort(event) {
   if(Dir=="asc") Dir="desc";
   else Dir="asc";
   target.dataset.sortDir=Dir;
-  
+
   students.sort(function(a, b) {
   let valA = a[sortProperty];
   let valB = b[sortProperty];
@@ -303,26 +439,50 @@ function handleSort(event) {
  * - "click" on each header in `tableHeaders` -> `handleSort`
  */
 async function loadStudentsAndInitialize() {
-  // ... your implementation here ...
-  const response = await fetch("/src/admin/api/students.json")
 
-  if (!response.ok) {
-    console.error("Failed to load");
-    return;
+  let data = [];
+
+  
+  try {
+    const dbRes = await fetch("./api/index.php?action=get_user_students", {
+      credentials: "include"
+    });
+
+    const dbJson = await dbRes.json();
+
+    if (dbRes.ok && dbJson.status === "success") {
+      
+      data = dbJson.data.map(u => ({
+        name: u.name,
+        id: u.email.split("@")[0],  
+        email: u.email
+      }));
+
+    } else {
+      throw new Error("DB load failed");
+    }
+  } catch (e) {
+   
+    const response = await fetch("/src/admin/api/students.json");
+
+    if (!response.ok) {
+      console.error("Failed to load");
+      return;
+    }
+
+    data = await response.json();
   }
-
-  const data = await response.json();
 
   students = data;
   renderTable(students);
-  changePasswordForm.addEventListener("submit",handleChangePassword);
-  addStudentForm.addEventListener("submit",handleAddStudent);
-  studentTableBody.addEventListener("click",handleTableClick);
-  searchInput.addEventListener("input",handleSearch);
-  tableHeaders.forEach(header => {
-    header.addEventListener("click", handleSort);
-    });
+
+  changePasswordForm.addEventListener("submit", handleChangePassword);
+  addStudentForm.addEventListener("submit", handleAddStudent);
+  studentTableBody.addEventListener("click", handleTableClick);
+  searchInput.addEventListener("input", handleSearch);
+  tableHeaders.forEach(header => header.addEventListener("click", handleSort));
 }
+
 
 
 // --- Initial Page Load ---
