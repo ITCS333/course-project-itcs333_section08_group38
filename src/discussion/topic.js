@@ -83,7 +83,7 @@ function createReplyArticle(reply) {
   const deleteBtn = document.createElement('button');
   deleteBtn.textContent = 'Delete';
   deleteBtn.classList.add('delete-reply-btn');
-  deleteBtn.dataset.id = reply.id;
+deleteBtn.dataset.id = reply.reply_id;
 
   article.appendChild(p);
   article.appendChild(footer);
@@ -128,24 +128,51 @@ function renderReplies() {
  * 6. Call `renderReplies()` to refresh the list.
  * 7. Clear the `newReplyText` textarea.
  */
-function handleAddReply(event) {
-  // ... your implementation here ...
-   event.preventDefault();
+
+
+async function handleAddReply(event) {
+  event.preventDefault();
 
   const text = newReplyText.value.trim();
   if (!text) return;
 
   const newReply = {
-    id: `reply_${Date.now()}`,
+    reply_id: `reply_${Date.now()}`, // match API field
+    topic_id: currentTopicId,        // send current topic id
     author: 'Student',
-    date: new Date().toISOString().split('T')[0],
     text: text
   };
 
-  currentReplies.push(newReply);
-  renderReplies();
-  newReplyText.value = '';
+  // POST to API
+  try {
+    const response = await fetch('index.php?resource=replies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newReply)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // Add to local array with a date
+      currentReplies.push({
+        id: newReply.reply_id,
+        author: newReply.author,
+        date: new Date().toISOString().split('T')[0],
+        text: newReply.text
+      });
+      renderReplies();
+      newReplyText.value = '';
+    } else {
+      alert('Failed to add reply: ' + result.message);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert('Error adding reply.');
+  }
 }
+
 
 /**
  * TODO: Implement the handleReplyListClick function.
@@ -161,7 +188,7 @@ function handleReplyListClick(event) {
   // ... your implementation here ...
   if (event.target.classList.contains('delete-reply-btn')) {
     const id = event.target.dataset.id;
-    currentReplies = currentReplies.filter(reply => reply.id !== id);
+    currentReplies = currentReplies.filter(reply => reply.reply_id !== id);
     renderReplies();
   }
 }
@@ -194,27 +221,29 @@ async function initializePage() {
   }
 
   try {
-    const [topicsResponse, repliesResponse] = await Promise.all([
-      fetch('topics.json'),
-      fetch('replies.json')
-    ]);
+   const topicsResponse = await fetch(`index.php?resource=topics&id=${currentTopicId}`);
+const repliesResponse = await fetch(`index.php?resource=replies&topic_id=${currentTopicId}`);
 
-    const topics = await topicsResponse.json();
-    const repliesData = await repliesResponse.json();
+const topic = await topicsResponse.json(); // single topic object
+const repliesData = await repliesResponse.json(); // replies array
 
-    const topic = topics.find(t => t.id === currentTopicId);
 
-    currentReplies = repliesData[currentTopicId] || [];
+    // Check if API call was successful
+if (!topic.success) {
+  topicSubject.textContent = "Topic not found.";
+  return;
+}
+if (topic.success) {
+  renderOriginalPost(topic.data);
+  currentReplies = repliesData.data || [];
+  renderReplies();
 
-    if (topic) {
-      renderOriginalPost(topic);
-      renderReplies();
+  replyForm.addEventListener('submit', handleAddReply);
+  replyListContainer.addEventListener('click', handleReplyListClick);
+} else {
+  topicSubject.textContent = "Topic not found.";
+}
 
-      replyForm.addEventListener('submit', handleAddReply);
-      replyListContainer.addEventListener('click', handleReplyListClick);
-    } else {
-      topicSubject.textContent = "Topic not found.";
-    }
 
   } catch (err) {
     console.error(err);

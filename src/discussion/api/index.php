@@ -198,7 +198,7 @@ function getTopicById($db, $topicId) {
     // TODO: Execute the 
      $stmt->execute();
     // TODO: Fetch the result
-    $topic = $stmt->fetch(PDO::FETCH_ASSOC)
+    $topic = $stmt->fetch(PDO::FETCH_ASSOC);
     
     // TODO: Check if topic exists
     // If topic found, return success response with topic data
@@ -208,6 +208,7 @@ function getTopicById($db, $topicId) {
             "success" => true,
             "data" => $topic
         ]);
+  
     }
      sendResponse([
         "success" => false,
@@ -483,7 +484,7 @@ function getRepliesByTopicId($db, $topicId) {
      $replies = $stmt->fetchAll(PDO::FETCH_ASSOC);
     // TODO: Return JSON response
     // Even if no replies found, return empty array (not an error)
-    endResponse([
+    sendResponse([
         "success" => true,
         "data" => $replies
     ]);
@@ -662,7 +663,8 @@ try {
 
         case 'GET':
             // TODO: Check for 'id' parameter in $_GET
-            $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+            $id = $_GET['id'] ?? null;
+
 
             if ($id) {
                 getSingle($resource, $id);
@@ -695,7 +697,7 @@ try {
                 exit;
             }
 
-            $id = intval($_GET['id']);
+            $id = $_GET['id'] ?? null;
             $data = json_decode(file_get_contents("php://input"), true);
 
             update($resource, $id, $data);
@@ -711,7 +713,7 @@ try {
                 exit;
             }
 
-            $id = intval($_GET['id']);
+            $id =  $_GET['id'] ?? null;
             delete($resource, $id);
             break;
 
