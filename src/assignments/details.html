@@ -19,9 +19,13 @@
      <link rel="stylesheet" href="../common/styles.css">
 
      <script src="details.js" defer></script>
-
+<script type="module">
+      import { requireLogin } from "../common/guard.js";
+      document.addEventListener("DOMContentLoaded", requireLogin);
+    </script>
 </head>
 <body>
+    
     <!-- TODO: Create a 'header' with a main heading ('h1'). Use a dummy title like "Assignment 1: HTML Basics". -->
      <header>
         <h1 id="assignment-title">Assignment 1: HTML Basics</h1>

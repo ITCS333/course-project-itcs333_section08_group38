@@ -21,9 +21,14 @@
     <link rel="stylesheet" href="../common/styles.css">
 
     <script src="manage_users.js" defer></script>
+    <script type="module">
+      import { requireAdmin } from "../common/guard.js";
+      document.addEventListener("DOMContentLoaded", requireAdmin);
+    </script>
 
 </head>
 <body>
+
     <!-- TODO: Create a 'header' element for the top of the page. -->
     <header>
         <!-- TODO: Inside the header, add a main heading (e.g., 'h1') with the text "Admin Portal". -->
@@ -33,6 +38,8 @@
 
     <!-- TODO: Create a 'main' element to hold the primary content of the portal. -->
      <main>
+         <a href="../../index.html" class="back-btn">⬅ Back to Home</a>
+
 
         <!-- Section 1: Password Management -->
         <!-- TODO: Create a 'section' for the password management functionality. -->
@@ -226,4 +233,3 @@
 
 </body>
 </html>
-

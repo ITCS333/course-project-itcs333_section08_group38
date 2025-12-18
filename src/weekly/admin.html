@@ -17,8 +17,13 @@
     <!-- TODO: Link to your CSS framework or stylesheet. -->
     <link rel="stylesheet" href="../common/styles.css">
     <script src="admin.js" defer></script>
+    <script type="module">
+      import { requireAdmin } from "../common/guard.js";
+      document.addEventListener("DOMContentLoaded", requireAdmin);
+    </script>
 </head>
 <body>
+   
 
     <!-- TODO: Create a 'header' with a main heading ('h1') "Manage Weekly Breakdown". -->
     <h1>Manage Weekly Breakdown</h1>

@@ -46,7 +46,7 @@ const messageContainer=document.getElementById("message-container");
 function displayMessage(message, type) {
   // ... your implementation here ...
   messageContainer.textContent=message;
-  messageContainer.classList=type;
+  messageContainer.className=type;
 }
 
 /**
@@ -97,27 +97,47 @@ function isValidPassword(password) {
  * - Call `displayMessage("Login successful!", "success")`.
  * - (Optional) Clear the email and password input fields.
  */
-function handleLogin(event) {
+// i add async to use await inside for real login process
+async function handleLogin(event) {
   // ... your implementation here ...
   event.preventDefault();
 
-  email=emailInput.value.trim();
-  pass=passInput.value.trim();
+  const email =emailInput.value.trim();
+  const password =passInput.value;
 
   if(!isValidEmail(email)){
     displayMessage("Invalid email format.", "error")
     return
   }
-  else if (!isValidPassword(pass)){
+  else if (!isValidPassword(password)){
     displayMessage("Password must be at least 8 characters.", "error");
     return;
   }
-  else{
-    displayMessage("Login successful!", "success")
-    emailInput.value="";
-    passInput.value="";
-  }
+  else {
+    try {
+      const response = await fetch("api/index.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password })
+      });
 
+      const result = await response.json();
+    
+      if(!result.success)
+      {
+        displayMessage(result.message , "error");
+        return;
+      }
+    
+        displayMessage("Login successful!", "success");
+
+        window.location.href = "../../index.html"; 
+      
+    } catch (err) {
+      displayMessage("Server error. Try again.", "error");
+    }
+  }
   
 }
 

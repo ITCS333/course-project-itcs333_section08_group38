@@ -19,12 +19,17 @@
     <!-- TODO: Link to your CSS framework or stylesheet. -->
      <link rel="stylesheet" href="../common/styles.css">
      <script src="board.js" defer></script>
-
+       <script type="module">
+      import { requireLogin } from "../common/guard.js";
+      document.addEventListener("DOMContentLoaded", requireLogin);
+    </script>
+ 
 </head>
 <body>
-
+    <header>
     <!-- TODO: Create a 'header' with a main heading ('h1') "General Discussion Board". -->
      <h1>General Discussion Board</h1>
+    </header>
 
     <!-- TODO: Create the 'main' content area. -->
            <main>

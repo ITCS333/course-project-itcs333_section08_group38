@@ -18,10 +18,15 @@
      <link rel="stylesheet" href="../common/styles.css">
 
      <script src="list.js" defer></script>
+ <script src="list.js" defer></script>
+   <script type="module">
+     import { requireLogin } from "../common/guard.js";
+     document.addEventListener("DOMContentLoaded", requireLogin);
+   </script>
 
 </head>
 <body>
-
+   
     <!-- TODO: Create a 'header' with a main heading ('h1') "Course Assignments". -->
      <header>
         <h1>Course Assignments</h1>
